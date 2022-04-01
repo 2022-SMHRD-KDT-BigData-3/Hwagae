@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%response.sendRedirect("/Hwagae/Main");%>
+	
 	<h1>두번째 커밋</h1>
 	<h1>세번째 커밋</h1>
 	<h1>4</h1>

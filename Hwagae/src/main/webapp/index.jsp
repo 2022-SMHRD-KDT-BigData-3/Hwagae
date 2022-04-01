@@ -8,5 +8,6 @@
 </head>
 <body>
 	<%response.sendRedirect("/Hwagae/Main");%>
+	<h1>두번쨰 커밋</h1>
 </body>
 </html>

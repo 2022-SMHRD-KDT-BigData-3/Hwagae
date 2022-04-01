@@ -1,6 +1,8 @@
 package com.smhrd.Hwagae.controller;
 
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +27,14 @@ public class HomeController {
     	
     	try {
     		
-    		TestVO testVO = homeService.retrieveUserInfo(null);
+    		HashMap<String, Object> requestMap = new HashMap<String, Object>();
+    		requestMap.put("name", "TEST");
+    		
+    		TestVO testVO = homeService.retrieveUserInfo(requestMap);
+    		
+    		model.addAttribute("name", testVO.getName());
+    		model.addAttribute("age", testVO.getAge());
+    		model.addAttribute("address", testVO.getAddress());
     		
     	}catch(Exception err) {
     		err.printStackTrace();

@@ -7,8 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>두번째 커밋(박민재)</h1>
-	<h1>세번째 커밋(나종원)</h1>
-	<h1>네번째 커밋(황승민)</h1>
+	<% response.sendRedirect("/Hwagae/Main");%>
+	<!-- 두번째 커밋(박민재) -->
+	<!-- 세번째 커밋(나종원) -->
+	<!-- 네번째 커밋(황승민) -->
 </body>
 </html>

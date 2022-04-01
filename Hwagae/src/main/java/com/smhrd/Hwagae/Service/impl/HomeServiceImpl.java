@@ -24,7 +24,7 @@ public class HomeServiceImpl implements HomeService {
 	@Override
 	public TestVO retrieveUserInfo(Map<String, Object> commendMap) throws Exception {
 		
-        List<TestVO> userInfoList = sqlSession.selectList(mapper+".retrieveUserInfo");
+        List<TestVO> userInfoList = sqlSession.selectList(mapper+".retrieveUserInfo",commendMap);
         
         TestVO testVO = new TestVO();
         

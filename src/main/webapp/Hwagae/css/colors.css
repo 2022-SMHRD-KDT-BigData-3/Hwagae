@@ -33,6 +33,7 @@ a:focus,
 .search-form .btn {
     color: #ffffff !important;
     background-color: #3197d6 !important;
+    overflow: hidden;
 }
 
 .tag-cloud-single span,

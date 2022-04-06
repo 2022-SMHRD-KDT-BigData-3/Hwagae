@@ -23,7 +23,8 @@
     <!-- Design fonts -->
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,400i,500,700" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700,900" rel="stylesheet"> 
-
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
 
@@ -38,7 +39,11 @@
 
     <!-- Colors for this template -->
     <link href="css/colors.css" rel="stylesheet">
-
+    
+    <link href="css/changwookcho.css" rel="stylesheet">
+	
+	
+	
 </head>
 <body>
 
@@ -53,17 +58,17 @@
    		<div><!--Start Main  -->
    			<section class="section wb">
 	            <div class="container">
-	                <div class="row">
-	                
-	                	<!-- 여기다가 작업하세요! -->
-	       			
-					</div>  <!--end row  -->
+	      			 <div class="row">
+	      			 	메인입니다.
+					 </div>
 				</div> <!--end Container  -->
-			</section>   			
+			</section>   
+			
+				
    		</div><!--end Main  -->
-  
-    	<%@ include file="footer.jsp"%>
-  
+   		
+  		<%@ include file="footer.jsp"%>
+  		
     </div>
     <!-- Core JavaScript
     ================================================== -->

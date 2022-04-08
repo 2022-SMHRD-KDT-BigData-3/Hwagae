@@ -126,12 +126,18 @@
         int idxEmail = responseBody.indexOf("email");
         int idxMobile = responseBody.indexOf("mobile");
         int idxNextMobile = responseBody.indexOf("mobile_");
-        System.out.println("Get Email : -> "+responseBody.substring(idxEmail + 8, idxMobile-3));
-        String snsid = responseBody.substring(idxEmail + 8, idxMobile-3);
-        System.out.println("Get Mobile : -> "+responseBody.substring(idxMobile + 9, idxNextMobile-3));
-        out.print("<br>"+responseBody.substring(idxEmail + 8, idxMobile-3)+"<br>");
-        out.print(responseBody.substring(idxMobile + 9, idxNextMobile-3));
-        response.sendRedirect("LoginServiceCon.do?snsid="+snsid);
+        if(idxMobile!=-1) {
+        	System.out.println("Get Email : -> "+responseBody.substring(idxEmail + 8, idxMobile-3));
+            String snsid = responseBody.substring(idxEmail + 8, idxMobile-3);
+            System.out.println("Get Mobile : -> "+responseBody.substring(idxMobile + 9, idxNextMobile-3));
+            out.print("<br>"+responseBody.substring(idxEmail + 8, idxMobile-3)+"<br>");
+            out.print(responseBody.substring(idxMobile + 9, idxNextMobile-3));
+            response.sendRedirect("LoginServiceCon.do?snsid="+snsid);
+        } else {
+        	System.out.println("Get Email : -> "+responseBody.substring(idxEmail + 8, responseBody.length()-3));
+            String snsid = responseBody.substring(idxEmail + 8, responseBody.length()-3);
+            response.sendRedirect("LoginServiceCon.do?snsid="+snsid);
+        }
       }
     } catch (Exception e) {
       System.out.println(e);

@@ -341,7 +341,8 @@
 		return new Promise(function(resolve, reject){
 			
 			let requestParam = {
-				"itemTitle" : $("input[name=itemTitle]").val()
+				"storeId" : $("input[name=storeId]").val()
+				,"itemTitle" : $("input[name=itemTitle]").val()
 				,"itemInfo" : $("textarea[name=itemInfo]").val()
 				,"itemCategory" : $("input[name=itemCategory]").val()
 				,"itemStatus" : $("input[name=itemStatus]:checked").val()         
@@ -383,6 +384,8 @@
 		
 		var formData = new FormData();
 		formData.append("itemId", itemId);
+		formData.append("storeId", $("input[name=storeId]").val());
+		
 		for(let i =0; i < fileList.length; i++){
 			formData.append("imgPath"+0, fileList[i]);
 		}
@@ -395,7 +398,7 @@
 			,processData: false // 필수 
 			,contentType: false // 필수 cache: false
 			, success: function (result) {
-				debugger;
+				location.href = "sample.jsp";
 			}, error: function (err) {
 				debugger;
 			}

@@ -11,10 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Command.AjaxCommand;
+import Controller.ChangeItemLike;
 import Controller.FileUploadServiceCon;
+import Controller.InsertItemQuestion;
+import Controller.ModifyStoreInfoServiceCon;
+import Controller.ProfileUploadServiceCon;
 import Controller.RegistItemServiceCon;
 import Controller.RetrieveCategoryServiceCon;
 import Controller.RetrieveLastTradeAreaServiceCon;
+import Controller.ShowStoreInfoServiceCon;
 
 
 @WebServlet("*.ajax")
@@ -44,6 +49,14 @@ public class AjaxController extends HttpServlet {
 			sc = new RegistItemServiceCon();
 		}else if(result.equals("FileUploadServiceCon.ajax")) {
 			sc = new FileUploadServiceCon();
+		}else if(result.equals("insertItemQuestion.ajax")) {
+			sc = new InsertItemQuestion();
+		}else if(result.equals("changeItemLike.ajax")) {
+			sc = new ChangeItemLike();
+		}else if(result.equals("ModifyStoreInfoServiceCon.ajax")) {
+			sc = new ModifyStoreInfoServiceCon();
+		}else if(result.equals("ProfileUploadServiceCon.ajax")) {
+			sc = new ProfileUploadServiceCon();
 		}
 		
 		sc.execute(request, response);

@@ -23,21 +23,24 @@ public class FileUploadServiceCon implements AjaxCommand{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
+		
 		List<Part> fileList = (List<Part>) request.getParts();
 		String itemId = request.getParameter("itemId");
+		String storeId = request.getParameter("storeId");
 		
 		System.out.println("이미지 갯수 : "+ fileList.size());
 		
-		UploadUtil uploadUtil = new UploadUtil("10000000", itemId);
 		
-		for(Part part : fileList) {
-			
-			if(part.getName().indexOf("imgPath") < 0) continue; //f로 들어온 Part가 아니면 스킵
-			if(part.getSubmittedFileName().equals("")) continue; //업로드 된 파일 이름이 없으면 스킵
-			
-			uploadUtil.saveFiles(part);
-		}
+	    UploadUtil uploadUtil = new UploadUtil(request);
+	  
+	    for(Part part : fileList) {
+		    if(part.getName().indexOf("imgPath") < 0) continue; //f로 들어온 Part가 아니면 스킵
+		    if(part.getSubmittedFileName().equals("")) continue; //업로드 된 파일 이름이 없으면 스킵
+		  
+		    uploadUtil.saveFile(part, storeId, itemId);
+	    }
 		
+		  
 	}
 
 }

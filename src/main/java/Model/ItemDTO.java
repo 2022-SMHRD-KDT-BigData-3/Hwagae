@@ -17,6 +17,20 @@ public class ItemDTO {
 	private String safetyTradeYn;
 	private String imgPath;
 	private int numLike;
+	private String registrationDate;
+	private String tradeStatus;
+	
+	//바둑판 형식의 상품정보 출력에 필요한 정보
+	public ItemDTO(int itemId, String itemTitle, int price, String registrationDate, String imgPath, String tradeStatus) {
+		super();
+		this.itemId = itemId;
+		this.itemTitle = itemTitle;
+		this.price = price;
+		this.registrationDate = registrationDate;
+		this.imgPath = imgPath;
+		this.tradeStatus = tradeStatus;
+	}
+	
 	
 	/*입력에 필요한 일부 정보*/
 	public ItemDTO(int storeId,String itemTitle, String itemInfo, String itemCategory, String itemStatus, String exchangeYn,
@@ -38,14 +52,13 @@ public class ItemDTO {
 		this.imgPath = imgPath;
 	}
 	
-	
 	/*출력에 필요한 전체 정보*/
 	public ItemDTO(int itemId, int storeId, String itemTitle, String itemInfo, String itemCategory, String itemStatus,
 			String exchangeYn, int price, String includeDeliveryPriceYn, String relationTag, String tradeArea,
-			int stock, String safetyTradeYn, String imgPath, int numLike) {
+			int stock, String safetyTradeYn, int numLike,String registrationDate) {
 		super();
 		this.itemId = itemId;
-		StoreId = storeId;
+		this.StoreId = storeId;
 		this.itemTitle = itemTitle;
 		this.itemInfo = itemInfo;
 		this.itemCategory = itemCategory;
@@ -57,8 +70,8 @@ public class ItemDTO {
 		this.tradeArea = tradeArea;
 		this.stock = stock;
 		this.safetyTradeYn = safetyTradeYn;
-		this.imgPath = imgPath;
 		this.numLike = numLike;
+		this.registrationDate = registrationDate;
 	}
 
 
@@ -134,6 +147,14 @@ public class ItemDTO {
 
 	public int getNumLike() {
 		return numLike;
+	}
+	
+	public String getRegistrationDate() {
+		return registrationDate;
+	}
+	
+	public String getTradeStatus() {
+		return tradeStatus;
 	}
 	
 }

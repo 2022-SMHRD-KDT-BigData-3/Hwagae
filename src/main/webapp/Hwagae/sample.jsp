@@ -51,8 +51,9 @@
 		MemberDTO info = (MemberDTO)session.getAttribute("info");
 		
 	%>
+	<!-- "<c:url value="/resources/images/loader.gif"/> -->
     <div id="preloader">
-        <img class="preloader" src="<c:url value="/resources/images/loader.gif" />" alt="">
+        
     </div>
 
     <div id="wrapper">

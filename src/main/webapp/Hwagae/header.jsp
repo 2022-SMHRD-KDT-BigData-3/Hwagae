@@ -1,5 +1,15 @@
+<%@page import="Model.WS_TalkDTO"%>
+<%@page import="Model.MemberDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	MemberDTO ws_info = (MemberDTO)session.getAttribute("info");
+	String ws_item_id = (String)session.getAttribute("item_id");
+	String ws_roomstate = (String)session.getAttribute("roomstate");
+	
+	if(ws_info!=null)
+		System.out.println("<header.jsp> store_id : " + ws_info.getStore_id() + " : item_id : " + ws_item_id + " roomstate : " + ws_roomstate);
+%>    
 <div class="collapse top-search" id="collapseExample">
             <div class="card card-block">
                 <div class="newsletter-widget text-center">
@@ -41,6 +51,7 @@
                             <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-search"></i> Search</a>
                         </div><!-- end search -->
                     </div><!-- end col -->
+                    
                 </div><!-- end row -->
             </div><!-- end header-logo -->
         </div><!-- end topbar -->
@@ -54,6 +65,18 @@
                         </div><!-- end logo -->
                     </div>
                 </div><!-- end row -->
+                <div class="messenger">
+        <div class="mesgcircle">
+            <div id="notificationScroll" class="msgscrol">
+                <span id="notificationMsg"></span>
+            </div>
+            <div class="mesgload">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
             </div><!-- end header-logo -->
         </div><!-- end header -->
 
@@ -474,5 +497,22 @@
                         </ul>
                     </div>
                 </nav>
-            </div><!-- end container -->
+            </div><!-- end container -->          
         </header><!-- end header -->
+
+	
+<script src="js/ws_lobby_event.js">
+</script>  
+<script>
+<%
+	if(ws_info!=null){ 
+		System.out.println("<header.jsp #2> store_id : " + ws_info.getStore_id() + " : item_id : " + ws_item_id + " roomstate : " + ws_roomstate);
+%>
+		console.log("test");
+		ws_store_id = '<%=ws_info.getStore_id()%>';	
+
+<%	}%>
+	ws_item_id = '<%=ws_item_id%>';
+	ws_roomstate = '<%=ws_roomstate%>';
+	console.log(ws_store_id +" : "+ ws_item_id + " : " + ws_roomstate);
+</script>  

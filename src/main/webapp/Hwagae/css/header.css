@@ -1,0 +1,17 @@
+@charset "EUC-KR";
+
+body > div.header-section > div > div.row > div > div > a > img{
+	max-width: 324px;
+    max-width: 100%;
+    margin: auto;
+    text-align: center;
+    display: block;
+    height:150px;
+}
+
+.fa-b:before {
+    font-family: Arial; /* your font family here! */
+    font-weight: bold;
+    color: green;
+    content: 'N';
+}

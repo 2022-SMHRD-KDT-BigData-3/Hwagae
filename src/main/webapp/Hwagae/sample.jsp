@@ -44,13 +44,7 @@
 	
 </head>
 <body>
-	<% 
-		// 로그인 정보를 담은 session 불러오기
-		// 로그인 성공 시 : info에는 값이 담겨있음.
-		// 로그인 실패 시 : info에는 null이 담겨있음.
-		MemberDTO info = (MemberDTO)session.getAttribute("info");
-		
-	%>
+
 	<!-- "<c:url value="/resources/images/loader.gif"/> -->
     <div id="preloader">
         
@@ -65,42 +59,12 @@
 	            <div class="container">
 	                <div class="row">
 	                	<!-- 여기다가 작업하세요! -->
-	                	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-						<script type="text/javascript">
-							function openPop() {
-								var popup = window.open('http://nid.naver.com/nidlogin.logout','popup','width=1px,height=1px');
-							}
-						</script>
-						
-						<%if (info != null) {%>
-						<h1><%=info.getSnsid()%>님 환영합니다.</h1>
-						<%} else {%>
-						<h1>로그인을 해주세요</h1>
-						<%
-						String clientId = "iYurGV0OE6snPVlinTga";//애플리케이션 클라이언트 아이디값";
-						String redirectURI = URLEncoder.encode("http://localhost:8081/Hwagae/Hwagae/naverCallBack.jsp", "UTF-8");
-						SecureRandom random = new SecureRandom();
-						String state = new BigInteger(130, random).toString();
-						String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
-						apiURL += "&client_id=" + clientId;
-						apiURL += "&redirect_uri=" + redirectURI;
-						apiURL += "&state=" + state;
-						session.setAttribute("state", state);
-						%>
-						<a href="<%=apiURL%>"><img height="50" src="http://static.nid.naver.com/oauth/small_g_in.PNG"/></a> 
-						<%}%>  
-	                	
-						<%if (info != null) {%>
-						<a href="naverLogOut.jsp" target="_self" onclick="openPop()">로그아웃</a>
-						<%} %>
 						
 						<!-- 여기다가 작업하세요! -->
 					</div>  <!--end row  -->
 				</div> <!--end Container  -->
 			</section>   			
    		</div><!--end Main  -->
-  
-    	<%@ include file="footer.jsp"%>
   
     </div>
     <!-- Core JavaScript

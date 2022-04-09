@@ -9,6 +9,19 @@ body > div.header-section > div > div.row > div > div > a > img{
     height:150px;
 }
 
+#login,
+#logout,
+#storesmall {
+	vertical-align: -32%;
+}
+
+#sell,
+#storebig,
+#talk,
+#category {
+	vertical-align: -50%;
+}
+
 .fa-b:before {
     font-family: Arial; /* your font family here! */
     font-weight: bold;

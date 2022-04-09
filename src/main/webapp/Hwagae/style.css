@@ -21,9 +21,11 @@
 
 /* BASIC 
 **************************************/
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
 body {
-    font-size: 15px;
+	font-family: 'Gowun Dodum', sans-serif;
+    font-size: 21px;
     line-height: 26px;
     background-color: #ffffff;
 }
@@ -39,7 +41,7 @@ p,
 .navbar-inverse .navbar-nav .nav-link,
 .header .dropdown-menu,
 .navbar-nav .nav-link {
-    font-family: 'Roboto', serif;
+    font-family: 'Gowun Dodum', sans-serif;
 }
 
 h1,
@@ -315,6 +317,13 @@ a {
     width: 100%;
 }
 
+#catefont,
+#sellfont,
+#storefont,
+#talkfont {
+	font-family: 'Gowun Dodum', sans-serif;
+	font-size: 21px;
+}
 
 /* Style the tab */
 
@@ -1611,6 +1620,7 @@ hr.invis3 {
 }
 
 .btn {
+	font-family: 'Gowun Dodum', sans-serif;
     background-color: #111111;
     border: 0 none;
     border-radius: 0;

@@ -1,3 +1,6 @@
+<%@page import="java.math.BigInteger"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.security.SecureRandom"%>
 <%@page import="Model.WS_TalkDTO"%>
 <%@page import="Model.MemberDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -41,8 +44,23 @@
 
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="topsearch text-right">
-                            <li class="list-inline-item"><a href="blog-category-01.html"><i class="fa fa-sign-in" aria-hidden="true"></i>로그인/회원가입</a></li>
-                                <li class="list-inline-item"><a href="page-contact.html"><i class="fa fa-bell" aria-hidden="true"></i> 내상점</a></li>
+                        	<%if (ws_info != null) {%>
+								<a href="naverLogOut.jsp" target="_self" onclick="openPop()"><img src="images/logout.png" id='logout'>&nbsp;로그아웃&nbsp;</a>
+							<%} else {%>
+							<%
+							String clientId = "iYurGV0OE6snPVlinTga";//애플리케이션 클라이언트 아이디값";
+							String redirectURI = URLEncoder.encode("http://localhost:8081/Hwagae/Hwagae/naverCallBack.jsp", "UTF-8");
+							SecureRandom random = new SecureRandom();
+							String state = new BigInteger(130, random).toString();
+							String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+							apiURL += "&client_id=" + clientId;
+							apiURL += "&redirect_uri=" + redirectURI;
+							apiURL += "&state=" + state;
+							session.setAttribute("state", state);
+							%>
+							<a href="<%=apiURL%>"><img src="images/login.png" id='login'>&nbsp;로그인/회원가입&nbsp;</a>
+							<%}%> 
+                            <a href=""><img src="images/storesmall.png" id='storesmall'></i>&nbsp;내상점&nbsp;</a></li>
                         </div><!-- end search -->
                     </div><!-- end col -->
                     
@@ -85,16 +103,16 @@
                            
                                
                            <li class="nav-item">
-                                <a class="nav-link color-pink-hover" href="blog-category-01.html">카테고리</a>
+                                <a href="" id='catefont'><img src="images/category.png" id='category'>&nbsp;&nbsp;카테고리&nbsp;&nbsp;</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link color-red-hover" href="blog-category-02.html">판매하기</a>
+                                <a href="" id='sellfont'><img src="images/sell.png" id='sell'>&nbsp;&nbsp;판매하기&nbsp;&nbsp;</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link color-aqua-hover" href="blog-category-03.html">내상점</a>
+                                <a href="" id='storerfont'><img src="images/storebig.png" id='storebig'>&nbsp;&nbsp;내상점&nbsp;&nbsp;</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link color-green-hover" href="blog-category-04.html">번개톡</a>
+                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont'><img src="images/talk.png" id='talk'>&nbsp;&nbsp;화개장톡&nbsp;&nbsp;</a>
                             </li>  
                            
                         </ul>
@@ -120,3 +138,8 @@
 	ws_roomstate = '<%=ws_roomstate%>';
 	console.log(ws_store_id +" : "+ ws_item_id + " : " + ws_roomstate);
 </script>  
+<script type="text/javascript">
+	function openPop() {
+	// 네이버 로그아웃(불완전함) var popup = window.open('http://nid.naver.com/nidlogin.logout','popup','width=1px,height=1px'); 
+}
+</script>

@@ -1,5 +1,8 @@
 package util;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,6 +11,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
@@ -18,6 +22,9 @@ public class UploadUtil {
     private String serverPath;
     private String storeId;
     private String itemId;
+    
+    int newWidth = 600;                                  // 변경 할 넓이
+    int newHeight = 600;
     
 	public UploadUtil(HttpServletRequest request) {
 		super();
@@ -48,6 +55,29 @@ public class UploadUtil {
 			
 			while((len = fis.read(buf, 0, 1024)) != -1)
 				fos.write(buf, 0, len);
+			
+			//리사이즈 하기
+			Image image = ImageIO.read(new File(filePath));
+			
+			// 원본 이미지 사이즈 가져오기
+            int imageWidth = image.getWidth(null);
+            int imageHeight = image.getHeight(null);
+            double ratio =0;
+            int w = 0;
+            int h = 0;
+ 
+            ratio = (double)newWidth/(double)imageWidth;
+            w = (int)(imageWidth * ratio);
+            h = w;
+ 
+            Image resizeImage = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+            
+            // 새 이미지  저장하기
+            BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+            Graphics g = newImage.getGraphics();
+            g.drawImage(resizeImage, 0, 0, null);
+            g.dispose();
+            ImageIO.write(newImage, "jpg", new File(filePath));
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -88,7 +118,7 @@ public class UploadUtil {
 			if(itemId.equals("profile")) {
 				return "\\Hwagae\\Hwagae\\images\\user.png";
 			}else {
-				return "\\Hwagae\\Hwagae\\images\\imgNotFound.jpg";
+				return "\\Hwagae\\Hwagae\\images\\imgNotFound.png";
 			}
 			 
 		}

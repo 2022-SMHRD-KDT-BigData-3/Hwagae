@@ -1,15 +1,5 @@
 (function(){
 	
-	$(document).ready(function() {
-    	$("#baseImg").height($("#baseImg").width());
-	});
-	
-		//jQuery
-	$(window).resize(function(){
-    	
-    	$("#baseImg").height($("#baseImg").width());
-	});
-	
 	$("#imgPath").change(function(e){
 		readMultipleImage(e.target);
 	});

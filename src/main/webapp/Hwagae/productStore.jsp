@@ -137,7 +137,7 @@
 		                                       <div class="blog-box">
 		                                           <div class="post-media">
 		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
-		                                                   <img id="baseImg" src="${list.imgPath}" class="img-fluid">
+		                                                   <img src="${list.imgPath}" class="img-fluid">
 		                                                   <div class="hovereffect">
 		                                                   </div><!-- end hover -->
 		                                               </a>
@@ -202,7 +202,7 @@
 		                                       <div class="blog-box">
 		                                           <div class="post-media">
 		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
-		                                                   <img id="baseImg" src="${list.imgPath}" class="img-fluid">
+		                                                   <img src="${list.imgPath}" class="img-fluid">
 		                                                   <div class="hovereffect">
 		                                                   </div><!-- end hover -->
 		                                               </a>

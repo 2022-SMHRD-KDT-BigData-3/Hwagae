@@ -168,7 +168,7 @@
 						 	</div>
 						 	<div class="col-md-10">
 	  							<input type="radio" name="itemStatus" value="U" checked="checked"/><label>중고상품</label>
-	  							<input type="radio" name="itemStatus" id="N"/><label>새상품</label>
+	  							<input type="radio" name="itemStatus" value="N"/><label>새상품</label>
 						 	</div>
 						</div>
 						

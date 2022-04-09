@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import Command.Command;
 import Controller.RegistItemServiceCon;
@@ -43,16 +44,10 @@ public class FrontController extends HttpServlet {
 		// 업캐스팅
 		Command sc = null;
 		
-		if (result.equals("ShowItemServiceCon.do")) {	
+		if (result.equals("ShowItemServiceCon.do")) {	 //등록상품보기
 			sc = new ShowItemServiceCon();
-
-		}else if(result.equals("ShowStoreInfoServiceCon.do")) {
+		} else if(result.equals("ShowStoreInfoServiceCon.do")) {  //내상점관리
 			sc = new ShowStoreInfoServiceCon();
-		}else if(result.equals("GoRegistItemServiceCon.do")) {
-			
-			response.sendRedirect("./registItem.jsp");
-			return;
-			
 		} else if (result.equals("LoginServiceCon.do")) {
     	 	 sc = new LoginServiceCon();
        	} else if (result.equals("JoinServiceCon.do")) {

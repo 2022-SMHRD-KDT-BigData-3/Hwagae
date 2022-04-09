@@ -18,12 +18,12 @@ public class ShowItemServiceCon implements Command {
 		try {
 			
 			HttpSession session = request.getSession();
-			
+			System.out.println("itemId : "+ request.getParameter("itemId"));
 			int itemId = Integer.parseInt(request.getParameter("itemId"));
 			int buyerId = 0;
 			int storeId = 0;
 			
-			if(request.getParameter("buyerId") != null) {
+			if(request.getParameter("buyerId") != null && request.getParameter("buyerId").equals("") == false) {
 				buyerId = Integer.parseInt(request.getParameter("buyerId"));
 			}
 			
@@ -38,7 +38,7 @@ public class ShowItemServiceCon implements Command {
 			
 			session.setAttribute("itemDto", itemDto);
 			session.setAttribute("imgPath", uploadUtil.getImgFiles(storeId, itemId));
-			session.setAttribute("questionList", dao.retrieveItemQuestion(itemId));
+			session.setAttribute("questionList", dao.retrieveItemQuestion(request, itemId));
 			session.setAttribute("itemLikeYn", dao.retrieveItemLike(itemId, buyerId));
 			
 		}catch(Exception err) {

@@ -59,7 +59,7 @@
      
    		<div><!--Start Main  -->
    			<section class="section wb">
-	            <div class="container">
+	            <div class="container" style="font-size: 1rem;">
 	            
 	      			 <div class="row itemTotalInfo">	 	
 						<div class="col-sm-5 imgBox">
@@ -127,16 +127,18 @@
 					 </div><!--itemTotalInfo -->
 					 
 					 <div class="row">
-					 
+					 					 
 						<div class="col-sm-12">
+						
 							<ul class="nav nav-tabs">
-							  <li class="nav-item">
-							    <a class="nav-link active" data-toggle="tab" href="#qwe">상품정보</a>
+							  <li class="nav-item" style="width: 50%; text-align: center; font-weight: 600;">
+							    <a class="nav-link active" href="#qwe">상품정보</a>
 							  </li>
-							  <li class="nav-item">
-							    <a class="nav-link" data-toggle="tab" href="#asd">상품문의</a>
+							  <li class="nav-item" style="width: 50%; text-align: center; font-weight: 600;">
+							    <a class="nav-link" href="#asd">상품문의</a>
 							  </li>
-							</ul>	
+							</ul>
+			
 							
 							<div class="title" ID="qwe">상품정보</div>
 							<hr>
@@ -181,7 +183,7 @@
 	                             	<c:forEach items="${questionList}" var="list" varStatus="status">
 	                                 <div class="media">
 	                                     <a class="media-left" href="#">
-	                                         <img src="images/user.png" alt="" class="rounded-circle">
+	                                         <img src="${list.profileImg}" alt="" class="rounded-circle">
 	                                     </a>
 	                                     <div class="media-body">
 	                                         <h4 class="media-heading user_name">${list.storeName}<small>${list.writeDate}</small></h4>
@@ -199,13 +201,9 @@
 				</div> <!--end Container  -->
 			</section>   
 			
-			<%
-				String buyerId = session.getAttribute("storeId").toString();
-			%>
-			
 			<input type="hidden" name="itemId" value="${itemDto.itemId}">
 			<input type="hidden" name="storeId" value="${itemDto.storeId}">
-			<input type="hidden" name="buyerId" value="<%=buyerId%>">	
+			<input type="hidden" name="buyerId" value="${info.store_id}">	
 			 
    		</div><!--end Main  -->
    		
@@ -218,6 +216,6 @@
     <script src="js/tether.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
-
+    
 </body>
 </html>

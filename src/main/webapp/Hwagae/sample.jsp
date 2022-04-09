@@ -1,8 +1,13 @@
+<%@page import="Model.ItemDTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.ItemDAO"%>
 <%@page import="Model.MemberDTO"%>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.security.SecureRandom" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="utf-8">
 
@@ -14,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <!-- Site Metas -->
-    <title>Cloapedia - Stylish Magazine Blog Template</title>
+    <title>화개장터</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -41,6 +46,9 @@
 
     <!-- Colors for this template -->
     <link href="css/colors.css" rel="stylesheet">
+    
+    <link href="css/changwookcho.css" rel="stylesheet">
+	<script src="js/jquery.min.js"></script>
 	
 </head>
 <body>
@@ -53,19 +61,47 @@
     <div id="wrapper">
     
 		<%@ include file="header.jsp"%>
+     	<%
+     		ItemDAO itemDao = new ItemDAO();
+     		ArrayList<ItemDTO> itemList = itemDao.retrieveItemList(request);
+     		session.setAttribute("itemList", itemList);
+     	%>
+     
+     
      
    		<div><!--Start Main  -->
    			<section class="section wb">
 	            <div class="container">
 	                <div class="row">
 	                	<!-- 여기다가 작업하세요! -->
-						
+							<c:forEach items="${itemList}" var="list">
+							    		
+			    				<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 item" status="${list.tradeStatus}" style="margin-bottom: 20px;">
+                                    <div class="blog-box">
+                                        <div class="post-media">
+                                            <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
+                                                <img id="baseImg" src="${list.imgPath}" class="img-fluid">
+                                                <div class="hovereffect">
+                                                </div><!-- end hover -->
+                                            </a>
+                                        </div><!-- end media -->
+                                        <div class="blog-meta">
+                                            <div><a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${storeDto.storeId}">${list.itemTitle}</a></div>
+                                            <div><fmt:formatNumber>${list.price}</fmt:formatNumber>원</div>
+                                            <div>${list.registrationDate}</div>
+                                        </div><!-- end meta -->
+                                    </div><!-- end blog-box -->
+	                         	</div>
+							    				
+							 </c:forEach>
 						<!-- 여기다가 작업하세요! -->
 					</div>  <!--end row  -->
 				</div> <!--end Container  -->
 			</section>   			
    		</div><!--end Main  -->
-  
+  	
+  		<input type="hidden" name="errMsg" value="${errMsg}">
+  	
     </div>
     <!-- Core JavaScript
     ================================================== -->
@@ -73,6 +109,6 @@
     <script src="js/tether.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
-
+   
 </body>
 </html>

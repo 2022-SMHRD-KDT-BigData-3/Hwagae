@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <!-- Site Metas -->
-    <title>Cloapedia - Stylish Magazine Blog Template</title>
+    <title>화개장터</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -58,10 +58,10 @@
      
    		<div><!--Start Main  -->
    			<section class="section wb">
-	            <div class="container">
+	            <div class="container" style="font-size: 1rem;">
 	      			 
 					<div class="row" style="border: 1px solid rgb(230, 229, 239)">	 	
-						<div class="col-sm-4 imgBox" style="background-color: gray; height: 350px;">
+						<div class="col-sm-4 imgBox" style="background-image: url(images/store.png); height: 350px;">
 							
 							<div>
 								<img id = "imgProfile" src="${storeDto.profileImg}">
@@ -76,7 +76,7 @@
 						
 							<div id="productStoreName">
 								${storeDto.storeName}
-								<Button id="btnModifyStoreName">상점명 수정</Button>
+								<Button id="btnModifyStoreName" style="display:none;">상점명 수정</Button>
 							</div>
 							
 							<div class="viewInfo" style="border-bottom: 1px solid rgb(230, 229, 239); height: 40px;">
@@ -102,13 +102,13 @@
 
 					 <div style="margin : 0px -15px;">
 					 	 <ul class="nav nav-tabs" style="margin-top: 30px;">
-							  <li class="nav-item">
+							  <li class="nav-item" style="width: 33.33%; text-align: center; font-weight: 600;">
 							  		<a class="nav-link active" data-toggle="tab" href="#item">상품</a>
 							  </li>
-							  <li class="nav-item">
-							    	<a class="nav-link" data-toggle="tab" href="#itemQuestion">상점문의</a>
+							  <li class="nav-item" style="width: 33.33%; text-align: center; font-weight: 600;">
+							    	<a class="nav-link" data-toggle="tab" href="#itemQuestion">상품문의</a>
 							  </li>
-							  <li class="nav-item">
+							  <li class="nav-item" style="width: 33.33%; text-align: center; font-weight: 600;">
 							    	<a class="nav-link" data-toggle="tab" href="#itemLike">찜</a>
 							  </li>
 						 </ul>
@@ -136,7 +136,72 @@
 							    			<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 item" status="${list.tradeStatus}">
 		                                       <div class="blog-box">
 		                                           <div class="post-media">
-		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${storeDto.storeId}">
+		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
+		                                                   <img id="baseImg" src="${list.imgPath}" class="img-fluid">
+		                                                   <div class="hovereffect">
+		                                                   </div><!-- end hover -->
+		                                               </a>
+		                                           </div><!-- end media -->
+		                                           <div class="blog-meta">
+		                                               <div><a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${storeDto.storeId}">${list.itemTitle}</a></div>
+		                                               <div><fmt:formatNumber>${list.price}</fmt:formatNumber>원</div>
+		                                               <div>${list.registrationDate}</div>
+		                                           </div><!-- end meta -->
+		                                       </div><!-- end blog-box -->
+	                                    	</div>
+							    				
+							    		</c:forEach>
+			    		              
+							    	</div>
+	
+							  </div>
+							  
+							  <div class="tab-pane fade" id="itemQuestion">
+									
+									<div class="title">
+							    	 	<span>상품문의</span>
+							    		<span style="color: red;"></span>
+							    	</div>
+											    	
+									<div class="custombox clearfix" style="margin-top: 20px; padding: 1rem 2rem;">
+					                     <div class="row">
+					                         <div class="col-lg-12">
+					                             <div class="comments-list">
+					                             	<c:forEach items="${totalQuestionList}" var="list" varStatus="status">
+					                                 <div class="media">
+					                                     <a class="media-left" href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
+					                                         <img src="${list.profileImg}" alt="" class="rounded-circle" style="border-radius: 0px;">
+					                                     </a>
+					                                     <div class="media-body">
+					                                         <h4 class="media-heading user_name">${list.itemTitle}<small>${list.writeDate}</small></h4>
+					                                         <p>${list.question}</p>
+					                                     </div>
+					                                 </div>
+					                				</c:forEach>
+					                             </div>
+					                         </div><!-- end col -->
+					                     </div><!-- end row -->
+					                </div><!-- end custom-box -->
+							    		    	
+							  </div>
+							  
+							  <div class="tab-pane fade" id="itemLike">
+							    	
+							    	<div class="title">
+							    	 	<span>찜</span>
+							    		<span style="color: red;"></span>
+							    	</div>
+							    	
+							    	<hr>
+							    	
+							    	<div class="row">
+							    	
+							    		<c:forEach items="${likeList}" var="list">
+							    		
+							    			<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 item" status="${list.tradeStatus}">
+		                                       <div class="blog-box">
+		                                           <div class="post-media">
+		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
 		                                                   <img id="baseImg" src="${list.imgPath}" class="img-fluid">
 		                                                   <div class="hovereffect">
 		                                                   </div><!-- end hover -->
@@ -154,13 +219,6 @@
 			    		              
 							    	</div>
 							    	
-							    	
-							  </div>
-							  <div class="tab-pane fade" id="itemQuestion">
-							    	상점문의
-							  </div>
-							  <div class="tab-pane fade" id="itemLike">
-							    	찜
 							  </div>
 					 	</div>
 					 </div> <!-- 탭출력 -->

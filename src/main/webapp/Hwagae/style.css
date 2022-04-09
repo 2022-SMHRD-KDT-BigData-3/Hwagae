@@ -185,6 +185,10 @@ a {
     margin: 0;
 }
 
+.navbar-nav > .nav-item > a{
+	font-size: 20px !important;
+}
+
 .header .dropdown-menu {
     padding: 0;
     box-shadow: none;

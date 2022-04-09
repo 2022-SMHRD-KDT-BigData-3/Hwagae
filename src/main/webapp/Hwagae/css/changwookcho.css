@@ -453,12 +453,12 @@ ul.imgs li{
 
 
 
-.nav-item{
+/*.nav-item{
 	width: 50%;
 	text-align: center;
 	color: rgb(33, 33, 33);
     font-weight: 600;
-}
+}*/
 
 .tab-pane > div:nth-child(1){
 	font-size: 18px;
@@ -621,8 +621,9 @@ ul.imgs li{
 	
 	margin-top : 150px;
     width: 106px;
-    border: 1px solid rgb(255, 255, 255);
-    color: rgb(255, 255, 255);
+    border: 1px solid #000;
+    color: #000;
+    font-weight : 600;
     height: 40px;
     display: flex;
     -webkit-box-pack: center;
@@ -704,5 +705,9 @@ ul.imgs li{
 	font-size: 12px;
     color: rgb(136, 136, 136);
     float :right;
+}
+
+.comments-list p{
+	font-family: 'NanumBarunGothic', 'serif';
 }
 

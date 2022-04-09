@@ -117,11 +117,13 @@ public class ItemDAO {
 		return itemId;
 	}
 	
-	public List<QuestionDTO> retrieveItemQuestion(int itemId){
+	public List<QuestionDTO> retrieveItemQuestion(HttpServletRequest request, int itemId){
 		
 		List<QuestionDTO> resultList = new ArrayList<QuestionDTO>();
 		
 		StringBuilder sql = new StringBuilder("SELECT B.STORE_NAME \n");
+		sql.append(",B.STORE_ID \n");
+		sql.append(",B.PROFILE_IMG \n");
 		sql.append(",A.QUESTION \n");
 		sql.append(",ROUND((SYSDATE - A.WRITE_DATE) * 24 * 60) AS WRITE_DATE \n");
 		sql.append("FROM ITEM_QUESTION A \n");
@@ -140,9 +142,12 @@ public class ItemDAO {
 			// 실행
 			rs = psmt.executeQuery();
 			
+			UploadUtil uploadUtil = new UploadUtil(request);
+			String profileImg;
 			// 결과를 꺼내서 ArrayList로 만들기
 			while(rs.next()) {
-				resultList.add(new QuestionDTO(rs.getString(1), rs.getString(2), changeTimeFormat(rs.getInt(3))));
+				profileImg = uploadUtil.getImgFile(rs.getString(3), String.valueOf(rs.getInt(2)), "profile");
+				resultList.add(new QuestionDTO(rs.getString(1),  rs.getInt(2), profileImg, rs.getString(4), changeTimeFormat(rs.getInt(5))));
 			}
 					
 		} catch (Exception e) {
@@ -150,11 +155,11 @@ public class ItemDAO {
 		}finally {
 			db_close();
 		}
-		System.out.println(resultList.size());
+		
 		return resultList;
 	}
 	
-	public List<QuestionDTO> insertItemQuestion(int itemId, int storeId, String itemInfo) {
+	public List<QuestionDTO> insertItemQuestion(HttpServletRequest request, int itemId, int storeId, String itemInfo) {
 		
 		List<QuestionDTO> resultList = new ArrayList<QuestionDTO>();
 		
@@ -190,7 +195,7 @@ public class ItemDAO {
 			db_close();
 		}
 		
-		resultList = retrieveItemQuestion(itemId);
+		resultList = retrieveItemQuestion(request, itemId);
 		
 		return resultList;
 	}
@@ -515,7 +520,12 @@ public class ItemDAO {
 		return itemLikeYn;
 	}
 
-	public ArrayList<ItemDTO> retrieveItemList(HttpServletRequest request, int storeId) {
+	public ArrayList<ItemDTO> retrieveItemList(HttpServletRequest request){
+		return retrieveItemList(request, -1);
+	}
+	
+	
+	public ArrayList<ItemDTO> retrieveItemList(HttpServletRequest request, int pnStoreId) {
 
 		ArrayList<ItemDTO> resultList = new ArrayList<ItemDTO>();
 		
@@ -525,12 +535,123 @@ public class ItemDAO {
 		sql.append(",A.price AS PRICE \n");
 		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
 		sql.append(",B.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",A.STORE_ID AS store_id \n");
 		sql.append("FROM ITEM A \n");
 		sql.append(",TRADE B \n");
 		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
 		sql.append("AND B.TRADE_STATUS <> 'D' \n");
-		sql.append("AND A.STORE_ID = ? ");
+		
+		if(pnStoreId > 0) {
+			sql.append("AND A.STORE_ID = ? ");
+		}else {
+			sql.append("AND ROWNUM <= 40 ");
+		}
+		
 	
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			
+			if(pnStoreId > 0) {
+				psmt.setInt(1, pnStoreId);
+			}
+			
+			// 실행
+			rs = psmt.executeQuery();
+			
+			UploadUtil uploadUtil = new UploadUtil(request);
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				
+				int itemId = rs.getInt(1);
+				String itemTitle = rs.getString(2);
+				
+				int price = rs.getInt(4);
+				String registrationDate = changeTimeFormat(rs.getInt(5));
+				String tradeStatus = rs.getString(6);
+				int storeId = rs.getInt(7);
+				String imgPath = uploadUtil.getImgFile(rs.getString(3), storeId, itemId) ;
+				
+				resultList.add(new ItemDTO(itemId, itemTitle, price, registrationDate, imgPath, tradeStatus));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return resultList;
+	}
+
+	public ArrayList<QuestionDTO> retrieveStoreQuestion(HttpServletRequest request, int storeId) {
+		
+		ArrayList<QuestionDTO> resultList = new ArrayList<QuestionDTO>();
+		
+		StringBuilder sql = new StringBuilder("SELECT C.ITEM_ID AS itemId \n");
+		sql.append(",C.STORE_ID AS storeId \n");
+		sql.append(",C.ITEM_TITLE AS itemTitle \n");
+		sql.append(",A.QUESTION AS quesiton \n");
+		sql.append(",C.IMG_PATH AS imgPath \n");
+		sql.append(",ROUND((SYSDATE - A.WRITE_DATE) * 24 * 60) AS writeDate \n");
+		sql.append("FROM ITEM_QUESTION A \n");
+		sql.append(",STORE B \n");
+		sql.append(",ITEM C \n");
+		sql.append("WHERE A.ITEM_ID = C.ITEM_ID \n");
+		sql.append("AND B.STORE_ID = C.STORE_ID \n");
+		sql.append("AND B.STORE_ID = ? \n");
+		sql.append("ORDER BY A.WRITE_DATE DESC");
+		
+	
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setInt(1, storeId);
+			
+			// 실행
+			rs = psmt.executeQuery();
+			
+			UploadUtil uploadUtil = new UploadUtil(request);
+			String profileImg;
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				profileImg = uploadUtil.getImgFile(rs.getString(5), rs.getInt(2), rs.getInt(1));
+				resultList.add(new QuestionDTO(rs.getInt(1) ,profileImg, rs.getString(4), changeTimeFormat(rs.getInt(6)), rs.getString(3)));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return resultList;
+	}
+
+	public ArrayList<ItemDTO> retrieveLikeList(HttpServletRequest request, int storeId) {
+		
+		ArrayList<ItemDTO> resultList = new ArrayList<ItemDTO>();
+		
+		StringBuilder sql = new StringBuilder("SELECT A.ITEM_ID AS itemId \n");
+		sql.append(",A.STORE_ID AS storeId \n");
+		sql.append(",A.IMG_PATH AS imgPath \n");
+		sql.append(",A.ITEM_TITLE AS itemTitle \n");
+		sql.append(",A.PRICE AS price \n");
+		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
+		sql.append(",C.TRADE_STATUS AS tradeStatus \n");
+		sql.append("FROM ITEM A \n");
+		sql.append("    ,ITEM_LIKE B \n");
+		sql.append("    ,TRADE C \n");
+		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
+		sql.append("  AND A.ITEM_ID = C.ITEM_ID \n");
+		sql.append("  AND B.STORE_ID = ? \n");
+		sql.append("  AND C.TRADE_STATUS <> 'D' \n");
+
 		System.out.println(sql.toString());
 
 		try {
@@ -547,11 +668,12 @@ public class ItemDAO {
 			while(rs.next()) {
 				
 				int itemId = rs.getInt(1);
-				String itemTitle = rs.getString(2);
-				String imgPath = uploadUtil.getImgFile(rs.getString(3), storeId, itemId) ;
-				int price = rs.getInt(4);
-				String registrationDate = changeTimeFormat(rs.getInt(5));
-				String tradeStatus = rs.getString(6);
+				int registerId = rs.getInt(2);
+				String imgPath = uploadUtil.getImgFile(rs.getString(3), registerId, itemId) ;
+				String itemTitle = rs.getString(4);
+				int price = rs.getInt(5);
+				String registrationDate = changeTimeFormat(rs.getInt(6));
+				String tradeStatus = rs.getString(7);
 				
 				resultList.add(new ItemDTO(itemId, itemTitle, price, registrationDate, imgPath, tradeStatus));
 			}

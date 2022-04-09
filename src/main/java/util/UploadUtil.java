@@ -85,7 +85,12 @@ public class UploadUtil {
 		File dir = new File(String.format("%s\\uplodedFiles\\%s\\%s", serverPath,storeId,itemId));
 		
 		if(!dir.exists()) {  //프로필 사진을 등록하지 않은 경우
-			 return "\\Hwagae\\Hwagae\\images\\user.png";
+			if(itemId.equals("profile")) {
+				return "\\Hwagae\\Hwagae\\images\\user.png";
+			}else {
+				return "\\Hwagae\\Hwagae\\images\\imgNotFound.jpg";
+			}
+			 
 		}
 		
 		return String.format("\\Hwagae\\uplodedFiles\\%s\\%s\\%s", storeId, itemId, filename);

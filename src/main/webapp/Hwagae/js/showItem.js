@@ -77,6 +77,10 @@
 	
 	$("#regiQuestionBtn").click(function(e){
 		
+		if($("input[name=buyerId]").val() == ''){
+			alert("상품문의는 로그인 후 이용하실 수 있습니다.");
+			return;
+		}
 		
 		param = {
 			"itemInfo" : $("#ipbItemInfo").val()

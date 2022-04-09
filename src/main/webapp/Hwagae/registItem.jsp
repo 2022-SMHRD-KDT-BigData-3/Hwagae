@@ -60,7 +60,7 @@
    		<div><!--Start Main  -->
    			
    				<section class="section wb">
-		            <div class="container">
+		            <div class="container" style="font-size: 1rem;">
 		      			 <div class="row">
 		      			 	<div class="col-md-12 registInfo">
 		            			<h2>기본정보<span>*필수항목</span></h2>
@@ -272,7 +272,7 @@
 					<button id="btnRegist">등록하기</button>
 				</div>
    			
-   				<input type="hidden" name="storeId" value="${storeId}">
+   				<input type="hidden" name="storeId" value="${info.store_id}">
    								
    		</div><!--end Main  -->
   

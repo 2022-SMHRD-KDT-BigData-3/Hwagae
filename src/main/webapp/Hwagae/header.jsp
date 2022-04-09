@@ -60,7 +60,7 @@
 							%>
 							<a href="<%=apiURL%>"><img src="images/login.png" id='login'>&nbsp;로그인/회원가입&nbsp;</a>
 							<%}%> 
-                            <a href=""><img src="images/storesmall.png" id='storesmall'></i>&nbsp;내상점&nbsp;</a></li>
+                            <a href="ShowStoreInfoServiceCon.do" class="checkLogin"><img src="images/storesmall.png" id='storesmall'></i>&nbsp;내상점&nbsp;</a></li>
                         </div><!-- end search -->
                     </div><!-- end col -->
                     
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="logo">
-                            <a href="index.html"><img src="images/mainlogo.png" alt=""></a>
+                            <a href="sample.jsp"><img src="images/mainlogo.png" alt=""></a>
                         </div><!-- end logo -->
                     </div>
                 </div><!-- end row -->
@@ -103,16 +103,16 @@
                            
                                
                            <li class="nav-item">
-                                <a href="" id='catefont'><img src="images/category.png" id='category'>&nbsp;&nbsp;카테고리&nbsp;&nbsp;</a>
+                                <a href="" id='catefont'><img src="images/category.png" id='category'><span>카테고리</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="" id='sellfont'><img src="images/sell.png" id='sell'>&nbsp;&nbsp;판매하기&nbsp;&nbsp;</a>
+                                <a href="registItem.jsp" id='sellfont' class="checkLogin"><img src="images/sell.png" id='sell'><span>판매하기</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="" id='storerfont'><img src="images/storebig.png" id='storebig'>&nbsp;&nbsp;내상점&nbsp;&nbsp;</a>
+                                <a href="ShowStoreInfoServiceCon.do" id='storerfont' class="checkLogin"><img src="images/storebig.png" id='storebig'><span>내상점</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont'><img src="images/talk.png" id='talk'>&nbsp;&nbsp;화개장톡&nbsp;&nbsp;</a>
+                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont'><img src="images/talk.png" id='talk'><span>화개장톡</span></a>
                             </li>  
                            
                         </ul>
@@ -123,8 +123,7 @@
         </header><!-- end header -->
 
 	
-<script src="js/ws_lobby_event.js">
-</script>  
+<script src="js/ws_lobby_event.js"></script>  
 <script>
 <%
 	if(ws_info!=null){ 
@@ -141,5 +140,29 @@
 <script type="text/javascript">
 	function openPop() {
 	// 네이버 로그아웃(불완전함) var popup = window.open('http://nid.naver.com/nidlogin.logout','popup','width=1px,height=1px'); 
-}
+	}
+	
+	<%
+		String loginYn = "Y";
+		if(session.getAttribute("info") ==  null){
+			loginYn = "N";
+		}
+	%>
+	
+	
+	
+	$(".checkLogin").click(function(e){
+		let href = $(this).attr("href");
+		let loginYn = '<%=loginYn%>';
+		
+		if(href == "ShowStoreInfoServiceCon.do" && loginYn == "N"){
+			alert("내상점은 로그인 후 이용할 수 있습니다.");
+			e.preventDefault();
+		}else if(href == "registItem.jsp" && loginYn == "N"){
+			alert("상품등록은 로그인 후 이용할 수 있습니다.");
+			e.preventDefault();
+		}
+		
+	});
+
 </script>

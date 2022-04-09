@@ -35,7 +35,7 @@ public class InsertItemQuestion implements AjaxCommand{
 			String itemInfo = request.getParameter("itemInfo");
 
 			ItemDAO dao = new ItemDAO();
-			List<QuestionDTO> questionList = dao.insertItemQuestion(itemId, storeId, itemInfo);
+			List<QuestionDTO> questionList = dao.insertItemQuestion(request,itemId, storeId, itemInfo);
 			
 			out.print(gson.toJson(questionList));
 			

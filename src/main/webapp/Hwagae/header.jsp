@@ -5,14 +5,18 @@
 <%@page import="Model.MemberDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <%
 	MemberDTO ws_info = (MemberDTO)session.getAttribute("info");
+	String ws_store_id = null;
 	String ws_item_id = (String)session.getAttribute("item_id");
-	String ws_roomstate = (String)session.getAttribute("roomstate");
-	
-	if(ws_info!=null)
-		System.out.println("<header.jsp> store_id : " + ws_info.getStore_id() + " : item_id : " + ws_item_id + " roomstate : " + ws_roomstate);
-%>    
+	String ws_room_state = (String)session.getAttribute("roomstate");
+	if(ws_info!=null) {
+		System.out.println("header.jsp : logged in.");
+		ws_store_id = ws_info.getStore_id();
+	}
+%>    	
+ 
 <div class="collapse top-search" id="collapseExample">
             <div class="card card-block">
                 <div class="newsletter-widget text-center">
@@ -45,7 +49,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="topsearch text-right">
                         	<%if (ws_info != null) {%>
-								<a href="naverLogOut.jsp" target="_self" onclick="openPop()"><img src="images/logout.png" id='logout'>&nbsp;로그아웃&nbsp;</a>
+								<a href="naverLogOut.jsp" target="_self" onclick="sendLogoutCommand()"><img src="images/logout.png" id='logout'>&nbsp;로그아웃&nbsp;</a>
 							<%} else {%>
 							<%
 							String clientId = "iYurGV0OE6snPVlinTga";//애플리케이션 클라이언트 아이디값";
@@ -103,16 +107,16 @@
                            
                                
                            <li class="nav-item">
-                                <a href="" id='catefont'><img src="images/category.png" id='category'><span>&nbsp;&nbsp;카테고리&nbsp;&nbsp;</span></a>
+                                <a href="" id='catefont'><img src="images/category.png" id='category'><span>카테고리</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="registItem.jsp" id='sellfont' class="checkLogin"><img src="images/sell.png" id='sell'><span>&nbsp;&nbsp;판매하기&nbsp;&nbsp;</span></a>
+                                <a href="registItem.jsp" id='sellfont' class="checkLogin"><img src="images/sell.png" id='sell'><span>판매하기</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="ShowStoreInfoServiceCon.do" id='storefont' class="checkLogin"><img src="images/storebig.png" id='storebig'><span>&nbsp;&nbsp;내상점&nbsp;&nbsp;</span></a>
+                                <a href="ShowStoreInfoServiceCon.do" id='storefont' class="checkLogin"><img src="images/storebig.png" id='storebig'><span>내상점</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont'><img src="images/talk.png" id='talk'><span>&nbsp;&nbsp;화개장톡&nbsp;&nbsp;</span></a>
+                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont' class="checkLogin"><img src="images/talk.png" id='talk'><span>화개장톡</span></a>
                             </li>  
                            
                         </ul>
@@ -121,25 +125,44 @@
             </div><!-- end container --> 
             <link rel="stylesheet" href="css/header.css">         
         </header><!-- end header -->
+<script src="js/jquery.min.js"></script>        
+<script>
+	document.addEventListener("DOMContentLoaded", () => { 
+		<%	
+		if(ws_store_id!=null){%>
+			store_id = '<%=ws_store_id%>';
+		<%  }
+		if(ws_item_id!=null){%>
+			item_id = '<%=ws_item_id%>';
+		<%	}
+		if(ws_room_state!=null){%>
+			room_state = '<%=ws_room_state%>';
+		<%	}%>	
+		console.log(store_id + " : " + item_id + " : " + room_state);
+	});
 
 	
-<script src="js/ws_lobby_event.js"></script>  
+</script> 
+<script type="text/javascript" src="./js/ws_lobby_event.js"></script>  
 <script>
 <%
 	if(ws_info!=null){ 
-		System.out.println("<header.jsp #2> store_id : " + ws_info.getStore_id() + " : item_id : " + ws_item_id + " roomstate : " + ws_roomstate);
+		System.out.println("<header.jsp #2> store_id : " + ws_info.getStore_id() + " : item_id : " + ws_item_id + " roomstate : " + ws_room_state);
 %>
-		console.log("test");
-		ws_store_id = '<%=ws_info.getStore_id()%>';	
+		store_id = '<%=ws_info.getStore_id()%>';	
 
 <%	}%>
-	ws_item_id = '<%=ws_item_id%>';
-	ws_roomstate = '<%=ws_roomstate%>';
-	console.log(ws_store_id +" : "+ ws_item_id + " : " + ws_roomstate);
+	item_id = '<%=ws_item_id%>';
+	rooms_tate = '<%=ws_room_state%>';
+
 </script>  
 <script type="text/javascript">
 	function openPop() {
-	// 네이버 로그아웃(불완전함) var popup = window.open('http://nid.naver.com/nidlogin.logout','popup','width=1px,height=1px'); 
+		var popup = window.open('http://nid.naver.com/nidlogin.logout','popup','width=1px,height=1px');
+	}
+	
+	function sendLogoutCommand(){
+		sendLogout(ws_store_id);
 	}
 	
 	<%
@@ -160,6 +183,9 @@
 			e.preventDefault();
 		}else if(href == "registItem.jsp" && loginYn == "N"){
 			alert("상품등록은 로그인 후 이용할 수 있습니다.");
+			e.preventDefault();
+		}else if(href == "./HwagaeTalk.jsp?roomstate=1" && loginYn == "N"){
+			alert("화개장톡은 로그인 후 이용할 수 있습니다.");
 			e.preventDefault();
 		}
 		

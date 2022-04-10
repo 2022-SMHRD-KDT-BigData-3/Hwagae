@@ -52,7 +52,13 @@
 	
 </head>
 <body>
-
+	<% 
+		// 로그인 정보를 담은 session 불러오기
+		// 로그인 성공 시 : info에는 값이 담겨있음.
+		// 로그인 실패 시 : info에는 null이 담겨있음.
+		MemberDTO info = (MemberDTO)session.getAttribute("info");
+		
+	%>
 	<!-- "<c:url value="/resources/images/loader.gif"/> -->
     <div id="preloader">
         
@@ -98,7 +104,8 @@
 			</section>   			
    		</div><!--end Main  -->
   	
-
+  		<input type="hidden" name="errMsg" value="${errMsg}">
+  	
     </div>
     <!-- Core JavaScript
     ================================================== -->

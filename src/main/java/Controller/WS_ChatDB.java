@@ -21,8 +21,14 @@ public class WS_ChatDB implements AjaxCommand{
 	
 		WS_TalkDAO mdao = new WS_TalkDAO();
 		ArrayList<WS_TalkDTO> mlist = new ArrayList<WS_TalkDTO>();
-		mlist = mdao.talkList();
 		
+		String sender = request.getParameter("sender");
+		String item = request.getParameter("item");
+		String receiver = request.getParameter("receiver");
+		
+		System.out.println("parameters from ajax by getting method : " + sender + " : " + item + " : " + receiver);
+		mlist = mdao.talkList(sender, item, receiver);
+		System.out.println("ajax by getting method  mlist size: " + mlist.size());
 		Gson gson = new Gson();
 		
 		//webList에 있는 데이터들이 자동으로 json형식으로 변환되어진다.

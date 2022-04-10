@@ -3,11 +3,11 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map.Entry"%>
+<%@page import="Model.MemberDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="utf-8">
-
     <!-- Basic -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -53,12 +53,6 @@
 	<link rel="stylesheet" href="css/ws_css.css">
 </head>
 <body>
-
-<%	
-	WS_TalkDAO mdao = new WS_TalkDAO();
-	HashMap<String, WS_TalkDTO> mlist = new HashMap<String, WS_TalkDTO>();
-	mlist = mdao.getChatList(Integer.toString(1));	
-%>
     <div id="preloader">
         
     </div>
@@ -66,21 +60,43 @@
     <div id="wrapper">
     
 		<%@ include file="header.jsp"%>
-     <div class="messenger">
-        <div class="mesgcircle">
-            <div id="notificationScroll" class="msgscrol">
-                <span id="notificationMsg"></span>
-            </div>
-            <div class="mesgload">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </div>
-   		<div><!--Start Main  -->
-   			
+<%
+    String redirectItem_Id = (String)request.getParameter("item_id");    
+    String redirectState = (String)request.getParameter("roomstate");
+    String ws_seller_store_id = "";
+	if(redirectItem_Id!=null) {
+		System.out.println("recommend item id : " + redirectItem_Id + "room state : " + redirectState);
+		ws_item_id = redirectItem_Id;
+		ws_room_state = redirectState;
+	}
 
+	WS_TalkDAO mdao = new WS_TalkDAO();
+	HashMap<String, WS_TalkDTO> mlist = new HashMap<String, WS_TalkDTO>();
+	if(ws_info!=null) {
+		mlist = mdao.getChatList(ws_info.getStore_id());
+		
+		if(ws_item_id!=null){
+			ws_seller_store_id = Integer.toString(mdao.getStoreByid(Integer.parseInt(ws_item_id)));
+			System.out.print("seller store id : " + ws_seller_store_id + ", ws_item_id : " + ws_item_id);
+		}
+	}
+%>
+<script>
+<%	if(ws_store_id!=null){%>
+		store_id = '<%=ws_store_id%>';
+<%  }
+	if(ws_item_id!=null){%>
+		item_id = '<%=ws_item_id%>';
+<%	}
+	if(ws_room_state!=null){%>
+		room_state = '<%=ws_room_state%>';
+<%	}
+	if(ws_seller_store_id!=null){%>
+		seller_store_id = '<%=ws_seller_store_id%>';
+<%	}%>
+
+</script>
+   		<div><!--Start Main  -->
 	<div id="container">
 	  <aside>
 	    <header>
@@ -151,17 +167,22 @@
     <script src="js/registItem.js"></script>
 	<script src="js/WS_js.js"></script>
 	<script>
-	<%
-		if(ws_info!=null){ 
-			System.out.println("<header.jsp #hwagaetalk> store_id : " + ws_info.getStore_id() + " : item_id : " + ws_item_id + " roomstate : " + ws_roomstate);
-	%>
-			console.log("test");
-			ws_store_id = '<%=ws_info.getStore_id()%>';	
+	// 채팅 내역까지 불러온 이 후 room state가 2이면 채팅방 진입
+	$( document ).ready(function(){
+		if(!room_state) console.log('error. there is no infomation about room state.');
+		else{
+			if(!store_id||!seller_store_id||!item_id){
+				// 필수 데이터 값이 없다면 채팅방에 진입할 수 없다.
+				console.log('error. need necessary data.');
+			}else{
+				if(room_state=="2"){ // 채팅방
+					enterRoom('I', '04', store_id, item_id, seller_store_id, "2");
+				}else
+					console.log('waiting room. do nothing.');
+			}
+		}
+	});
 	
-	<%	}%>
-		ws_item_id = '<%=ws_item_id%>';
-		ws_roomstate = '<%=ws_roomstate%>';
-		console.log(ws_store_id +" : "+ ws_item_id + " : " + ws_roomstate);
-	</script>  	
+	</script>
 </body>
 </html>

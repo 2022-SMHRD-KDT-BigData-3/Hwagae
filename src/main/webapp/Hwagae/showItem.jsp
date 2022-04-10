@@ -45,7 +45,7 @@
     <link href="css/changwookcho.css" rel="stylesheet">
 	
 	<script src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+	
 </head>
 <body>
 
@@ -83,8 +83,7 @@
 						<div class="col-sm-7">
 							<div class="itemTitle">${itemDto.itemTitle}</div>
 							<div class="itemPrice"><fmt:formatNumber>${itemDto.price}</fmt:formatNumber>원</div>
-							<input type="hidden" name="stock" value="${itemDto.stock}">
-							<input type="hidden" name="tradeStatus" value="${itemDto.tradeStatus}">
+							
 							<hr>
 							
 							<div class="viewInfo">
@@ -115,7 +114,7 @@
 										<button id="btnItemLike" active="${itemLikeYn}"><label class="material-icons">favorite</label>찜</button>
 									</div>
 									<div class="col-sm-4">
-										<button id="btnTalk">연락하기</button>
+										<button id="btnTalk" class="checkLogin">연락하기</button>
 									</div>
 									<div class="col-sm-4">
 										<button id="btnBuy">바로구매</button>	
@@ -201,7 +200,7 @@
 				
 				</div> <!--end Container  -->
 			</section>   
-			
+		
 			<input type="hidden" name="itemId" value="${itemDto.itemId}">
 			<input type="hidden" name="storeId" value="${itemDto.storeId}">
 			<input type="hidden" name="buyerId" value="${info.store_id}">	
@@ -217,6 +216,34 @@
     <script src="js/tether.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
-    
+    <script src="js/WS_js.js"></script>
+    <script>
+
+    item_id = $('input[name=itemId]').val();
+    seller_store_id = $('input[name=buyerId]').val();
+	<%
+	String loginYn2 = "Y";
+	if(session.getAttribute("info") ==  null){
+		loginYn2 = "N";
+	}
+	%>
+
+	$(".checkLogin").click(function(e){
+	let id = $(this).attr("id");
+	let loginYn = '<%=loginYn2%>';
+	
+	if(id == "btnTalk" && loginYn == "N"){
+		alert("연락하기는 로그인 후 이용할 수 있습니다.");
+		e.preventDefault();
+	}else if(id == "btnTalk" && loginYn == "Y"){
+		console.log('showitem : item_id' + $('itemID').text());
+		if(store_id==seller_store_id)
+			location.href="./HwagaeTalk.jsp?item_id=" + item_id + "&roomstate=1";
+		else
+			location.href="./HwagaeTalk.jsp?item_id=" + item_id + "&roomstate=2";
+	}
+	
+});
+    </script>
 </body>
 </html>

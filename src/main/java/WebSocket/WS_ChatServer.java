@@ -241,9 +241,19 @@ public class WS_ChatServer implements WS_ServerSetting {
 	public void OnOpen(@PathParam("STORE_ID") String store_ID, @PathParam("ITEM_ID") String item_ID,
 			@PathParam("STATE") int state, Session session) {
 		// 페이지 이동, 새로 고침에 의해 매번 session이 변경되기에 mapMember의 관리는 여기서 시작
+		if(store_ID==null) return;  // 구조상 null이 들어 올 수 없으나 예외처리
+		
 		logger.debug("check parameters : a client connect");
 		store_ID = Integer.toString(Integer.parseInt(store_ID));
-		item_ID = Integer.toString(Integer.parseInt(item_ID));
+		if(item_ID!=null)
+			if(!item_ID.equals("null"))
+				item_ID = Integer.toString(Integer.parseInt(item_ID));
+			else
+				item_ID = "00";
+		else {
+			item_ID = "00"; // 상품 정보와 관련이 없는 메인 화면에서 번개톡 버튼을 누른 경우, 초기화
+			logger.debug("init item_id. there is no information.");
+		}
 		logger.debug("session id : " + session.getId() + " : Store_ID : " + store_ID + " : Item_ID : " + item_ID
 				+ " : State : " + state);
 		if(mapMember.get(store_ID)!=null) {
@@ -323,6 +333,7 @@ public class WS_ChatServer implements WS_ServerSetting {
 						sendAlarm(receiver.getSession(), receiver_store_ID, HWAGAE_TALK, replyMessage); 
 					}
 				}else{ // receiver is logged out.
+					logger.debug("receiver is logged out. leave a message.");
 					dbControl.talkSend(setWS_DTO(sender, receiver_store_ID, replyMessage,"N")); // save message
 					//sendMsgConfirm(session, sender_store_ID, "N"); // message unconfirmed
 				}
@@ -372,6 +383,10 @@ public class WS_ChatServer implements WS_ServerSetting {
 			logger.debug("TOTAL_INFO : send_store_id = " + sender_store_id + " item_id = " + item_id);
 		} else if (div.equals(LOGOUT)) {
 			logger.debug("LOGOUT");
+			if(sender_store_id!=null&&mapMember.get(sender_store_id)!=null) {
+				logger.debug("member logged out. remove mapMember");
+				mapMember.remove(sender_store_id);
+			}
 		} else if (div.equals(UPLOAD)) {
 			logger.debug("UPLOAD");
 		} else if (div.equals(DOWNLOAD)) {
@@ -417,6 +432,7 @@ public class WS_ChatServer implements WS_ServerSetting {
 	@OnMessage
 	public void OnMessage(Session session, String message) {
 		logger.debug("from client : " + message + " size : " + mapMember.size());
+		if(message.length()<1) return;
 		ArrayList<String> parseList = parseMessage(message);
 		String command = parseList.get(TYPE);
 

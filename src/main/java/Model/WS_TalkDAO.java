@@ -18,6 +18,27 @@ public class WS_TalkDAO {
 			WS_TalkDTO info = null;
 			
 			// DB연결메소드
+			public void db_localConn() {
+				try {				
+					// 1. Class찾기 -> Java와 DB를 이어주는 통로
+					Class.forName("oracle.jdbc.driver.OracleDriver");					
+					// 2. DB에 접속하기 위한 카드키만들기 (url, id, pw)
+					String db_url = "jdbc:oracle:thin:@localhost:1521:xe";
+					String db_id = "hr";
+					String db_pw = "hr";					
+					// 3. DB연결-> 연결 성공 시 Connection 객체로 반환
+					conn = DriverManager.getConnection(db_url, db_id, db_pw);
+					
+					if(conn != null) {
+						System.out.println("DB연결성공");
+					}else {
+						System.out.println("DB연결실패");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+			}
+			
 			public void db_conn() {
 				try {				
 					// 1. Class찾기 -> Java와 DB를 이어주는 통로
@@ -50,6 +71,26 @@ public class WS_TalkDAO {
 				}
 			}
 			
+			// get store_id by item_id
+			public int getStoreByid(int item_id) {
+				String sql = "select store_id from item where item_id=?";		
+				int store_id = 0;
+				db_conn();				
+				
+				try {
+					psmt = conn.prepareStatement(sql);
+					psmt.setInt(1, item_id);
+					rs = psmt.executeQuery();		
+					
+					if(rs.next()) store_id = rs.getInt(1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					db_close();
+				}
+				
+				return store_id;
+			}
 			
 			//메시지 DB에 입력
 			public int talkSend(WS_TalkDTO dto) {			
@@ -76,12 +117,50 @@ public class WS_TalkDAO {
 				return cnt;
 			}
 			
+			public ArrayList<WS_TalkDTO> talkList(String sender, String item, String receiver) {
+				// 로그인한 사용자에게 온 메세지만 가져오기
+				System.out.println("[talkList 접속완료");
+				// sql 문장은 talkDB.sql에도 있습니다
+				String sql = "select *from hwagae_talk where item_id=? and ((sender_store_id=? and receiver_store_id=?) or (sender_store_id=? and receiver_store_id=?))";
+				// 데이터를 담을 ArrayList
+				ArrayList<WS_TalkDTO> mlist = new ArrayList<WS_TalkDTO>();
+				db_conn();				
+				try {
+					psmt = conn.prepareStatement(sql);
+					psmt.setInt(1, Integer.parseInt(item));
+					psmt.setInt(2,  Integer.parseInt(sender));
+					psmt.setInt(3,  Integer.parseInt(receiver));
+					psmt.setInt(4,  Integer.parseInt(receiver));
+					psmt.setInt(5,  Integer.parseInt(sender));
+					// 실행
+					rs = psmt.executeQuery();					
+					// 결과를 꺼내서 ArrayList 로 만들기
+					while(rs.next()) {						
+						int talk_Seq = rs.getInt(1);
+						int item_ID = rs.getInt(2);
+						int sender_store_ID = rs.getInt(3);
+						int receiver_store_ID = rs.getInt(4);
+						String talk_Info = rs.getString(5);
+						String confirm_YN = rs.getString(6);
+						String talk_Date= rs.getString(7);					
+						WS_TalkDTO dto = new WS_TalkDTO(talk_Seq,item_ID,sender_store_ID, receiver_store_ID, talk_Info,confirm_YN, talk_Date);						
+						mlist.add(dto);
+					}					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					db_close();
+				}
+				return mlist;
+			}			
+			
 			// 채팅목록 구현을 위한 아이디 채팅내용 시간 가져오기
 			public ArrayList<WS_TalkDTO> talkList() {
 				// 로그인한 사용자에게 온 메세지만 가져오기
 				System.out.println("[talkList 접속완료");
 				// sql 문장은 talkDB.sql에도 있습니다
-				String sql = "SELECT * FROM (SELECT talk_Seq,item_ID, sender_store_ID,receiver_store_ID, TALK_INFO, confirm_YN, TALK_DATE,RANK() OVER (PARTITION BY item_ID ORDER BY TO_CHAR(TALK_DATE, 'YYYY-MM-DD HH24:MI:SS') DESC) AS RNK FROM HWAGAE_TALK)";				
+				//String sql = "SELECT * FROM (SELECT talk_Seq,item_ID, sender_store_ID,receiver_store_ID, TALK_INFO, confirm_YN, TALK_DATE,RANK() OVER (PARTITION BY item_ID ORDER BY TO_CHAR(TALK_DATE, 'YYYY-MM-DD HH24:MI:SS') DESC) AS RNK FROM HWAGAE_TALK)";				
+				String sql = "select *from hwagae_talk where item_id=? and ((sender_store_id=? and receiver_store_id=?) or (sender_store_id=? and receiver_store_id=?))";
 				// 데이터를 담을 ArrayList
 				ArrayList<WS_TalkDTO> mlist = new ArrayList<WS_TalkDTO>();
 				db_conn();				

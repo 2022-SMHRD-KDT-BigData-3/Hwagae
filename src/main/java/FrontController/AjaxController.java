@@ -20,6 +20,7 @@ import Controller.RegistItemServiceCon;
 import Controller.RetrieveCategoryServiceCon;
 import Controller.RetrieveLastTradeAreaServiceCon;
 import Controller.ShowStoreInfoServiceCon;
+import Controller.UpdateTradeInfo;
 import Controller.WS_ChatDB;
 
 
@@ -60,6 +61,8 @@ public class AjaxController extends HttpServlet {
          sc = new ProfileUploadServiceCon();
       }else if(result.equals("WS_ChatDB.ajax")) {
           sc = new WS_ChatDB();
+      }else if(result.equals("UpdateTradeInfo.ajax")) {
+    	  sc = new UpdateTradeInfo();
       }
       
       sc.execute(request, response);

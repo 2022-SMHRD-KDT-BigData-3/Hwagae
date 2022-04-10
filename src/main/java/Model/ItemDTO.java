@@ -55,7 +55,7 @@ public class ItemDTO {
 	/*출력에 필요한 전체 정보*/
 	public ItemDTO(int itemId, int storeId, String itemTitle, String itemInfo, String itemCategory, String itemStatus,
 			String exchangeYn, int price, String includeDeliveryPriceYn, String relationTag, String tradeArea,
-			int stock, String safetyTradeYn, int numLike,String registrationDate) {
+			int stock, String safetyTradeYn, int numLike,String registrationDate, String tradeState) {
 		super();
 		this.itemId = itemId;
 		this.StoreId = storeId;
@@ -72,6 +72,7 @@ public class ItemDTO {
 		this.safetyTradeYn = safetyTradeYn;
 		this.numLike = numLike;
 		this.registrationDate = registrationDate;
+		this.tradeStatus = tradeState;
 	}
 
 

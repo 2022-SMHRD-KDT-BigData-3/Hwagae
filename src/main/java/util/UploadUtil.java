@@ -97,6 +97,12 @@ public class UploadUtil {
 		System.out.println("abs : "+dir.getAbsolutePath());
 		String[] filenames = dir.list();
 		
+		//다른 팀원이 등록한 상품이라서 이미지폴더가 없는 경우
+		if(filenames == null) {
+			resultList.add("\\Hwagae\\Hwagae\\images\\imgNotFound.png");
+			return resultList;
+		}
+		
 		for (String filename : filenames) {
 			resultList.add(String.format("\\Hwagae\\uplodedFiles\\%s\\%s\\%s", storeId, itemId, filename)); 
 		}

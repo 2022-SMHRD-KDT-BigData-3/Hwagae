@@ -345,10 +345,13 @@ public class ItemDAO {
 		sql.append(",A.SAFETY_TRADE_YN AS SafetyTradeYn \n");
 		sql.append(",A.NUM_LIKE AS numLike \n");
 		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
+		sql.append(",C.TRADE_STATUS AS tradeStatus \n");
 		sql.append("FROM ITEM A \n");
 		sql.append("    ,CATEGORY B \n");
+		sql.append("    ,TRADE C \n");
 		sql.append("WHERE A.ITEM_CATEGORY = B.CAT_SEQ \n");
-		sql.append("AND ITEM_ID = ?");
+		sql.append("AND A.ITEM_ID = C.ITEM_ID \n");
+		sql.append("AND A.ITEM_ID = ?");
 
 		System.out.println(sql.toString());
 
@@ -376,8 +379,9 @@ public class ItemDAO {
 				String SafetyTradeYn = rs.getString(13);
 				int numLike = rs.getInt(14);
 				String registrationDate = changeTimeFormat(rs.getInt(15));
+				String tradeStatus = rs.getString(16);
 			
-				dto = new ItemDTO(itemId, storeId, itemTitle, itemInfo, itemCategory, itemStatus, exchangeYn, price, includeDeliveryPriceYn, relationTag, tradeArea, stock, SafetyTradeYn, numLike, registrationDate);
+				dto = new ItemDTO(itemId, storeId, itemTitle, itemInfo, itemCategory, itemStatus, exchangeYn, price, includeDeliveryPriceYn, relationTag, tradeArea, stock, SafetyTradeYn, numLike, registrationDate, tradeStatus);
 				
 			};
 			
@@ -428,7 +432,7 @@ public class ItemDAO {
 
 	}
 
-	public void insertItemLike(int itemId, int storeId) {
+	public void insertItemLike(int itemId, int buyerId) {
 		
 		StringBuilder sql = new StringBuilder("INSERT INTO ITEM_LIKE ( \n");
 		sql.append("LIKE_SEQ \n");
@@ -448,7 +452,7 @@ public class ItemDAO {
 			db_conn();
 			psmt = conn.prepareStatement(sql.toString());
 			psmt.setInt(1,itemId);
-			psmt.setInt(2,storeId);
+			psmt.setInt(2,buyerId);
 
 			// 실행
 			int cnt = psmt.executeUpdate();
@@ -539,11 +543,12 @@ public class ItemDAO {
 		sql.append("FROM ITEM A \n");
 		sql.append(",TRADE B \n");
 		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
-		sql.append("AND B.TRADE_STATUS <> 'D' \n");
 		
 		if(pnStoreId > 0) {
 			sql.append("AND A.STORE_ID = ? ");
+			sql.append("AND B.TRADE_STATUS <> 'D' \n");
 		}else {
+			sql.append("AND B.TRADE_STATUS = 'S' \n");
 			sql.append("AND ROWNUM <= 40 ");
 		}
 		
@@ -686,5 +691,81 @@ public class ItemDAO {
 		
 		return resultList;
 	}
+
+	public void insertTrade() {
+		
+		ArrayList<Integer> itemList = getNotFoundTradeInfoItem();
+	
+		for(int i = 0; i < itemList.size() ;i++) {
+			insertTrade(itemList.get(i));
+		}
+	
+	}
+	
+	private ArrayList<Integer> getNotFoundTradeInfoItem(){
+		
+		ArrayList<Integer> itemList = new ArrayList<Integer>();
+		
+		StringBuilder sql = new StringBuilder("SELECT ITEM_ID AS itemId \n");
+		sql.append("FROM ITEM I \n");
+		sql.append("WHERE NOT EXISTS (SELECT 1 \n");
+		sql.append("FROM TRADE T \n");
+		sql.append("WHERE I.ITEM_ID = T.ITEM_ID)");
+
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+	
+			// 실행
+			rs = psmt.executeQuery();
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				itemList.add(rs.getInt(1));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return itemList;
+	}
+
+	public void updateTradeInfo(String impUid, String apprNo, String itemId, String buyerId, int quantity, int totalPrice) {
+		
+		StringBuilder sql = new StringBuilder("UPDATE TRADE SET \n");
+		sql.append("STORE_ID = ? \n");
+		sql.append(",QUANTITY = ? \n");
+		sql.append(",TOTAL_PRICE = ? \n");
+		sql.append(",TRADE_STATUS = 'C' \n");
+		sql.append(",CONFIRM_DATE = SYSDATE \n");
+		sql.append("WHERE ITEM_ID = ?");
+		
+		System.out.println(sql.toString());
+		
+		try {
+			
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setString(1, buyerId);
+			psmt.setInt(2, quantity);
+			psmt.setInt(3, totalPrice);
+			psmt.setString(4, itemId);
+
+			// 실행
+			int cnt = psmt.executeUpdate();
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+	}
+	
 	
 }

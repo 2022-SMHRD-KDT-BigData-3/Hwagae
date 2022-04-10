@@ -21,6 +21,7 @@ import Controller.ShowItemServiceCon;
 import Controller.ShowStoreInfoServiceCon;
 import Controller.JoinServiceCon;
 import Controller.LoginServiceCon;
+import Model.ItemDAO;
 import Model.MemberDAO;
 import Model.MemberDTO;
 
@@ -52,7 +53,7 @@ public class FrontController extends HttpServlet {
     	 	 sc = new LoginServiceCon();
        	} else if (result.equals("JoinServiceCon.do")) {
     	  	 sc = new JoinServiceCon();
-       	} 
+       	}
 		
 		String moveURL = sc.execute(request, response);
 		response.sendRedirect(moveURL);

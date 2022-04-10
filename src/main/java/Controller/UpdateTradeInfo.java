@@ -3,7 +3,6 @@ package Controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +12,8 @@ import com.google.gson.Gson;
 
 import Command.AjaxCommand;
 import Model.ItemDAO;
-import Model.QuestionDTO;
 
-public class ChangeItemLike implements AjaxCommand{
+public class UpdateTradeInfo implements AjaxCommand{
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,27 +26,25 @@ public class ChangeItemLike implements AjaxCommand{
 		
 		try {
 		
-			int itemId = Integer.parseInt(request.getParameter("itemId"));
-			int buyerId = Integer.parseInt(request.getParameter("buyerId"));
-			String itemLikeYn = request.getParameter("itemLikeYn");
-			System.out.println("itemLikeYn : "+itemLikeYn);
+			String impUid = request.getParameter("impUid").toString();
+			String apprNo = request.getParameter("apprNo").toString();
+			String itemId = request.getParameter("itemId").toString();
+			String buyerId = request.getParameter("buyerId").toString();
+			int quantity = Integer.parseInt(request.getParameter("quantity"));
+			int totalPrice = Integer.parseInt(request.getParameter("totalPrice"));
+						
 			ItemDAO dao = new ItemDAO();
-			
-			if(itemLikeYn.equals("Y")) {
-				dao.insertItemLike(itemId, buyerId);
-			}else {
-				dao.deleteItemLike(itemId, buyerId);
-			}
+			dao.updateTradeInfo(impUid,apprNo,itemId,buyerId,quantity,totalPrice);
 			
 			resultMap.put("rsltCd", 0);
-		
+			
 		}catch(Exception err) {
 			resultMap.put("rsltCd", -1);
-			resultMap.put("errMsg", "아이템 찜처리 중 알 수 없는 오류가 발생하였습니다.");
+			resultMap.put("errMsg", "상품구매 중 알 수 없는 오류가 발생하였습니다.");
 		}
 		
 		out.print(gson.toJson(resultMap));
 		
-	}
-
+	}	
+	
 }

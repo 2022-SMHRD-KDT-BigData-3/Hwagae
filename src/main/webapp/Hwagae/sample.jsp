@@ -67,8 +67,6 @@
      		session.setAttribute("itemList", itemList);
      	%>
      
-     
-     
    		<div><!--Start Main  -->
    			<section class="section wb">
 	            <div class="container">
@@ -100,8 +98,7 @@
 			</section>   			
    		</div><!--end Main  -->
   	
-  		<input type="hidden" name="errMsg" value="${errMsg}">
-  	
+
     </div>
     <!-- Core JavaScript
     ================================================== -->

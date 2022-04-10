@@ -14,7 +14,10 @@
 			$("#btnItemLike").addClass("btnLikeActive");
 		}
 		
-		
+		if($("input[name=storeId]").val() == $("input[name=buyerId]").val()){
+			$(".tradeBtnGroup").hide();
+		}
+	
 	});
 	
 	$(".slideBtn").click(function(e){
@@ -120,6 +123,52 @@
 
 	});
 	
+	$("#btnBuy").click(async function(e){
+		
+		let tradeStatus = $("input[name=tradeStatus]").val();
+		
+		if($("input[name=buyerId]").val() == ''){
+			alert("상품구매는 로그인 후 이용하실 수 있습니다.");
+			return;
+		}
+
+		if(tradeStatus == "C"){
+			alert("해당 상품은 거래가 완료된 상태입니다.");
+			return;
+		}else if(tradeStatus == "D"){
+			alert("해당 상품은 판매가 취소된 상태입니다.");
+			return;
+		}else if(tradeStatus == "R"){
+			alert("해당 상품은 다른 사용자가 예약한 상태입니다.");
+			return;
+		}
+		
+		let requestParam = {
+				pg : 'html5_inicis',
+			    pay_method : 'card',
+			    merchant_uid: $("input[name=itemId]").val(), // 상점에서 관리하는 주문 번호
+			    name : `주문명:${$(".itemTitle").text().substr(0,10)}`,
+			    amount : 10,
+			    buyer_email : 'iamport@siot.do',
+			    buyer_name : '화개장터고객',
+			    buyer_tel : '010-1234-5678',
+			    buyer_addr : '서울특별시 강남구 삼성동',
+			    buyer_postcode : '123-456'
+		};
+		
+		try{
+			let rsp = await requestPay(requestParam);
+			//let rsp = {};
+			await updateTradeInfo(rsp);
+			
+		}catch(err){
+			alert(err);
+		}
+		
+	});
+	
+	
+	
 	function changeItemLike(itemLikeYn){
 		
 		param = {
@@ -136,7 +185,7 @@
 			,dataType : 'json'
 			,contentType : "application/json;charset=UTF-8"
 			,success : function(data) {
-								
+				console.log(data);		
   			}, 
 			error : function(err) {
   				console.log(err);
@@ -145,5 +194,70 @@
 		
 	}
 	
-		
+	function requestPay(requestParam){
+		return new Promise(function(resolve, reject){
+			
+			IMP.init("imp74526635");
+			IMP.request_pay(requestParam, function(rsp) {
+			
+	    		if (rsp.success) {
+					resolve(rsp);
+					return;
+			    } else {
+			        reject(rsp.error_msg);
+					return;
+			    }
+
+			});
+				
+		});
+	} 
+	
+	function updateTradeInfo(rsp){
+		return new Promise(function(resolve, reject){
+			
+			let param = {
+				"impUid" : rsp.imp_uid
+				,"apprNo" : rsp.apply_num
+				,"itemId" : $("input[name=itemId]").val()
+				,"buyerId" : $("input[name=buyerId]").val()
+				,"quantity" : $("input[name=stock]").val()
+				,"totalPrice" : $(".itemPrice").text().replace("원","")
+			};
+			/*let param = {
+				"impUid" : "123456789"
+				,"apprNo" : "123456789"
+				,"itemId" : $("input[name=itemId]").val()
+				,"buyerId" : $("input[name=buyerId]").val()
+				,"quantity" : $("input[name=stock]").val()
+				,"totalPrice" : $(".itemPrice").text().replace("원","")
+			}*/
+			
+			
+
+			$.ajax({
+				url : 'UpdateTradeInfo.ajax'
+				,type : 'GET'
+				,data : param
+				,dataType : 'json'
+				,contentType : "application/json;charset=UTF-8"
+				,success : function(data) {
+					
+					if(data.rsltCd == "0"){
+						alert("물품구매가 정상적으로 이루어 졌습니다. \n이용해 주셔서 감사합니다.");
+					}else{
+						reject(data.errMsg);
+					}
+					return;	
+	  			}, 
+				error : function(err) {
+	  				reject(err);
+					return;
+				}
+  			});
+
+		});
+	}
+	
+	
 }());

@@ -397,9 +397,9 @@ ul.imgs li{
 	line-height: 30px;
 }
 
-.tradeInfo{
+/*.tradeInfo{
 	margin-top: 50px;
-}
+}*/
 
 .tradeInfo > div > div:nth-child(1) {
 	float: left;

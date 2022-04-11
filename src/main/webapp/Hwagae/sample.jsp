@@ -103,7 +103,7 @@
 				</div> <!--end Container  -->
 			</section>   			
    		</div><!--end Main  -->
-  	
+  		<%@ include file="footer.jsp"%>
   		<input type="hidden" name="errMsg" value="${errMsg}">
   	
     </div>

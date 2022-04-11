@@ -29,9 +29,6 @@ body {
     line-height: 26px;
     background-color: #ffffff;
 }
-li.nav-item {
-    margin-right: 60px;
-}
 h1,
 h2,
 h3,
@@ -413,7 +410,12 @@ div.tab button:hover {
     width: 80%;
 }
 
-
+li.nav-item {
+    margin-right: 60px;
+}
+li.nav-item:last-child {
+    margin-right: 0px;
+}
 /* SECTIONS
 **************************************/
 

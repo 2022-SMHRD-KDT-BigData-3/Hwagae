@@ -106,7 +106,7 @@
 			</section>   			
    		</div><!--end Main  -->
   	
-
+		<%@ include file="footer.jsp"%>
     </div>
     <!-- Core JavaScript
     ================================================== -->

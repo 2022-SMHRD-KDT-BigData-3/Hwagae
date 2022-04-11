@@ -1,80 +1,145 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<link href="./css/ws_notification.css" rel="stylesheet">
-<footer>
-	<div class="footer_inner clearfix">
-		<div class="footer_top_holder">
-			<div class="footer_top">
-				<div class="container">
-					<div class="container_inner">
-						<div id="block-8" class="widget widget_block">
-							<div class="footer_inner">
-								<div class="left">
-									<div class="footer_logo">
-										<img src="images/logosmall.png">
-									</div>
-									<p></p>
-								</div>
-								<div class="right">
-									<ul class="sns">
-										<li class="kakao"><a href="https://pf.kakao.com/_VYlpM"
-											target="_blank"><img
-												src="https://smhrd.or.kr//wp-content/themes/bridge-child/img/sns1.png"></a></li>
-										<li class="naver"><a
-											href="https://blog.naver.com/jang0_0yw" target="_blank"><img
-												src="https://smhrd.or.kr/wp-content/themes/bridge-child/img/sns2.png"></a></li>
-										<li class="youtube"><a
-											href="https://www.youtube.com/channel/UCubIpLB7cA9tWIUZ26WFKPg"
-											target="_blank"><img
-												src="https://smhrd.or.kr/wp-content/themes/bridge-child/img/sns3.png"></a></li>
-										<li class="instagram"><a
-											href="https://www.instagram.com/smhrd0317/" target="_blank"><img
-												src="https://smhrd.or.kr/wp-content/themes/bridge-child/img/sns4.png"></a></li>
-										<li class="facebook"><a
-											href="https://www.facebook.com/smhrd0317" target="_blank"><img
-												src="https://smhrd.or.kr/wp-content/themes/bridge-child/img/sns5.png"></a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="footer_bottom_holder">
-			<div class="container">
-				<div class="container_inner">
-					<div class="footer_bottom">
-						<div class="footer_inner">
-							<div class="left">
-								<dl>
-									<dt>(팀)화개장터</dt>
-									<dd>
-										팀장 : <span class="wh">조창욱<br></span> 팀원 : <br> <span class="wh">황승민
-										<br> 박민재 <br>
-										나종원<br> 김지은<br>
-									</dd>
-								</dl>
-							</div>
-							<div class="right">
-								<dl>
-									<dt>스마트인재개발원</dt>
-									<dd>
-										전화상담 : <span class="wh">062-655-3506, 9</span><br> 
-										주소 : <span class="wh">광주 동구 예술길 31-15 3, 4, 7층</span><br> 
-										홈페이지 : <span class="wh">https://smhrd.or.kr</span><br> 
-										FAX : <span class="wh">062-655-3510</span><br> 
-										E-Mail : <span class="wh">smhrd@smhrd.or.kr</span><br> 
-										</div>
-									</dd>
-								</dl>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
-<link rel="stylesheet" href="css/header.css">
+    pageEncoding="UTF-8"%>
+<footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <h2 class="widget-title">Recent Posts</h2>
+                            <div class="blog-list-widget">
+                                <div class="list-group">
+                                    <a href="single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="w-100 justify-content-between">
+                                            <img src="upload/blog_square_01.jpg" alt="" class="img-fluid float-left">
+                                            <h5 class="mb-1">5 Beautiful buildings you need to before dying</h5>
+                                            <small>12 Jan, 2016</small>
+                                        </div>
+                                    </a>
+
+                                    <a href="single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="w-100 justify-content-between">
+                                            <img src="upload/blog_square_02.jpg" alt="" class="img-fluid float-left">
+                                            <h5 class="mb-1">Let's make an introduction for creative life</h5>
+                                            <small>11 Jan, 2016</small>
+                                        </div>
+                                    </a>
+
+                                    <a href="single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="w-100 last-item justify-content-between">
+                                            <img src="upload/blog_square_03.jpg" alt="" class="img-fluid float-left">
+                                            <h5 class="mb-1">Did you see the most beautiful sea in the world?</h5>
+                                            <small>07 Jan, 2016</small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><!-- end blog-list -->
+                        </div><!-- end widget -->
+                    </div><!-- end col -->
+
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <h2 class="widget-title">Popular Posts</h2>
+                            <div class="blog-list-widget">
+                                <div class="list-group">
+                                    <a href="single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="w-100 justify-content-between">
+                                            <img src="upload/blog_square_04.jpg" alt="" class="img-fluid float-left">
+                                            <h5 class="mb-1">Banana-chip chocolate cake recipe with customs</h5>
+                                            <span class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </span>
+                                        </div>
+                                    </a>
+
+                                    <a href="single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="w-100 justify-content-between">
+                                            <img src="upload/blog_square_07.jpg" alt="" class="img-fluid float-left">
+                                            <h5 class="mb-1">10 practical ways to choose organic vegetables</h5>
+                                            <span class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </span>
+                                        </div>
+                                    </a>
+
+                                    <a href="single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="w-100 last-item justify-content-between">
+                                            <img src="upload/blog_square_06.jpg" alt="" class="img-fluid float-left">
+                                            <h5 class="mb-1">We are making homemade ravioli, nice and good</h5>
+                                            <span class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><!-- end blog-list -->
+                        </div><!-- end widget -->
+                    </div><!-- end col -->
+
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <h2 class="widget-title">Popular Categories</h2>
+                            <div class="link-widget">
+                                <ul>
+                                    <li><a href="#">Fahsion <span>(21)</span></a></li>
+                                    <li><a href="#">Lifestyle <span>(15)</span></a></li>
+                                    <li><a href="#">Art & Design <span>(31)</span></a></li>
+                                    <li><a href="#">Health Beauty <span>(22)</span></a></li>
+                                    <li><a href="#">Clothing <span>(66)</span></a></li>
+                                    <li><a href="#">Entertaintment <span>(11)</span></a></li>
+                                    <li><a href="#">Food & Drink <span>(87)</span></a></li>
+                                </ul>
+                            </div><!-- end link-widget -->
+                        </div><!-- end widget -->
+                    </div><!-- end col -->
+                </div><!-- end row -->
+
+                <hr class="invis1">
+
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <div class="widget">
+                            <div class="footer-text text-center">
+                                <a href="index.html"><img src="images/flogo.png" alt="" class="img-fluid"></a>
+                                <p>Cloapedia is a personal blog for handcrafted, cameramade photography content, fashion styles from independent creatives around the world.</p>
+                                <div class="social">
+                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i class="fa fa-facebook"></i></a>              
+                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Twitter"><i class="fa fa-twitter"></i></a>
+                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Instagram"><i class="fa fa-instagram"></i></a>
+                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Google Plus"><i class="fa fa-google-plus"></i></a>
+                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="Pinterest"><i class="fa fa-pinterest"></i></a>
+                                </div>
+
+                                <hr class="invis">
+
+                                <div class="newsletter-widget text-center">
+                                    <form class="form-inline">
+                                        <input type="text" class="form-control" placeholder="Enter your email address">
+                                        <button type="submit" class="btn btn-primary">Subscribe <i class="fa fa-envelope-open-o"></i></button>
+                                    </form>
+                                </div><!-- end newsletter -->
+                            </div><!-- end footer-text -->
+                        </div><!-- end widget -->
+                    </div><!-- end col -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <br>
+                        <div class="copyright">&copy; Cloapedia. Design: <a href="http://html.design">HTML Design</a>.</div>
+                    </div>
+                </div>
+            </div><!-- end container -->
+        </footer><!-- end footer -->
+
+        <div class="dmtop">Scroll to Top</div>

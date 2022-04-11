@@ -17,18 +17,26 @@ public class ItemDTO {
 	private String safetyTradeYn;
 	private String imgPath;
 	private int numLike;
+	private int numQuestion;
 	private String registrationDate;
+	private String registrationDate2;
 	private String tradeStatus;
 	
+
+
 	//바둑판 형식의 상품정보 출력에 필요한 정보
-	public ItemDTO(int itemId, String itemTitle, int price, String registrationDate, String imgPath, String tradeStatus) {
+	public ItemDTO(int itemId, String imgPath, String tradeStatus, String itemTitle, int price, String safetyTradeYn, int numLike, int numQuestion, String registrationDate, String registrationDate2) {
 		super();
 		this.itemId = itemId;
-		this.itemTitle = itemTitle;
-		this.price = price;
-		this.registrationDate = registrationDate;
 		this.imgPath = imgPath;
 		this.tradeStatus = tradeStatus;
+		this.itemTitle = itemTitle;
+		this.price = price;
+		this.safetyTradeYn = safetyTradeYn;
+		this.numLike = numLike;
+		this.numQuestion = numQuestion;
+		this.registrationDate  = registrationDate;
+		this.registrationDate2 = registrationDate2;
 	}
 	
 	
@@ -150,8 +158,16 @@ public class ItemDTO {
 		return numLike;
 	}
 	
+	public int getNumQuestion() {
+		return numQuestion;
+	}
+	
 	public String getRegistrationDate() {
 		return registrationDate;
+	}
+	
+	public String getRegistrationDate2() {
+		return registrationDate2;
 	}
 	
 	public String getTradeStatus() {

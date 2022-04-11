@@ -66,7 +66,7 @@
 							<div>
 								<img id = "imgProfile" src="${storeDto.profileImg}">
 								<input type="file" id="imgPath" name="imgPath" accept="image/jpg, image/jpeg, image/png">
-								<a href="#">내상점 관리</a>
+								<a href="ShowManageItemServiceCon.do?page=10&no=1&status=A">내상점 관리</a>
 							</div>
 
 						</div>
@@ -138,6 +138,7 @@
 		                                           <div class="post-media">
 		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
 		                                                   <img src="${list.imgPath}" class="img-fluid">
+		                                                   <div class="safetyMark" style="display: ${list.safetyTradeYn eq 'Y' ? 'block' : 'none'}">안전</div>
 		                                                   <div class="hovereffect">
 		                                                   </div><!-- end hover -->
 		                                               </a>
@@ -203,6 +204,7 @@
 		                                           <div class="post-media">
 		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
 		                                                   <img src="${list.imgPath}" class="img-fluid">
+		                                                   <div class="safetyMark" style="display: ${list.safetyTradeYn eq 'Y' ? 'block' : 'none'}">안전</div>
 		                                                   <div class="hovereffect">
 		                                                   </div><!-- end hover -->
 		                                               </a>

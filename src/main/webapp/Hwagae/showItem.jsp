@@ -45,7 +45,7 @@
     <link href="css/changwookcho.css" rel="stylesheet">
 	
 	<script src="js/jquery.min.js"></script>
-	
+	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 </head>
 <body>
 
@@ -84,6 +84,9 @@
 							<div class="itemTitle">${itemDto.itemTitle}</div>
 							<div class="itemPrice"><fmt:formatNumber>${itemDto.price}</fmt:formatNumber>원</div>
 							
+							<input type="hidden" name="stock" value="${itemDto.stock}">
+							<input type="hidden" name="tradeStatus" value="${itemDto.tradeStatus}">
+							<input type="hidden" name="safetyTradeYn" value="${itemDto.safetyTradeYn}">
 							<hr>
 							
 							<div class="viewInfo">
@@ -200,7 +203,7 @@
 				
 				</div> <!--end Container  -->
 			</section>   
-		
+			
 			<input type="hidden" name="itemId" value="${itemDto.itemId}">
 			<input type="hidden" name="storeId" value="${itemDto.storeId}">
 			<input type="hidden" name="buyerId" value="${info.store_id}">	

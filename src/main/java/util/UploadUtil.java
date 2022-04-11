@@ -142,7 +142,7 @@ public class UploadUtil {
 		makeBaseDir(storeId,itemId);
 		
 		File dir = new File(String.format("%s\\uplodedFiles\\%s\\%s", serverPath,storeId,itemId));
-		System.out.println("abs : "+dir.getAbsolutePath());
+		
 		String[] filenames = dir.list();
 		
 		for (String filename : filenames) {
@@ -152,6 +152,24 @@ public class UploadUtil {
 		
 		saveFile(profile, storeId, itemId);
 	
+	}
+
+	public String getMainImgName(Integer itemId) {
+		String result = null;
+		File dir = new File(String.format("%s\\uplodedFiles\\%s\\%s", serverPath,"10000000",itemId));
+		
+		if(!dir.exists()) {
+			 return null;
+		 }
+		
+		String[] filenames = dir.list();
+		
+		for (String filename : filenames) {
+			result = filename;
+			break;
+		}
+		
+		return result;
 	}
 	
 	

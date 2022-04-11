@@ -18,12 +18,14 @@ import Command.Command;
 import Controller.RegistItemServiceCon;
 import Controller.RetrieveCategoryServiceCon;
 import Controller.ShowItemServiceCon;
+import Controller.ShowManageItemServiceCon;
 import Controller.ShowStoreInfoServiceCon;
 import Controller.JoinServiceCon;
 import Controller.LoginServiceCon;
 import Model.ItemDAO;
 import Model.MemberDAO;
 import Model.MemberDTO;
+import util.UploadUtil;
 
 
 // 확장자 패턴을 활용해서 .do 확장자를 가지고 있으면
@@ -53,7 +55,16 @@ public class FrontController extends HttpServlet {
     	 	 sc = new LoginServiceCon();
        	} else if (result.equals("JoinServiceCon.do")) {
     	  	 sc = new JoinServiceCon();
+       	} else if (result.equals("ShowManageItemServiceCon.do")) {
+       		 sc = new ShowManageItemServiceCon();
+       	}else if(result.equals("UdateMainImg.do")) {
+       		
+       		ItemDAO dao = new ItemDAO();
+       		dao.updateMainImg(request);
+       	
+       		return;
        	}
+		
 		
 		String moveURL = sc.execute(request, response);
 		response.sendRedirect(moveURL);

@@ -139,7 +139,7 @@ public class StoreDAO {
 			//하루 : 1440분
 			//한 달 : 43200분
 			//일 년  : 518400분 
-			System.out.println("분 :" + registrationDate);
+			
 			if(registrationDate < 60) {    //1시간 이하값은 분 단위 표시
 				
 				unit = registrationDate;

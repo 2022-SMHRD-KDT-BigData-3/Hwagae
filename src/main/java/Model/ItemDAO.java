@@ -402,7 +402,7 @@ public class ItemDAO {
 		//하루 : 1440분
 		//한 달 : 43200분
 		//일 년  : 518400분 
-		System.out.println("분 :" + registrationDate);
+		
 		if(registrationDate < 60) {    //1시간 이하값은 분 단위 표시
 			
 			unit = registrationDate;
@@ -534,18 +534,22 @@ public class ItemDAO {
 		ArrayList<ItemDTO> resultList = new ArrayList<ItemDTO>();
 		
 		StringBuilder sql = new StringBuilder("SELECT A.ITEM_ID AS itemId \n");
-		sql.append(",A.ITEM_TITLE AS itemTitle \n");
-		sql.append(",A.IMG_PATH AS IMG_PATH \n");
-		sql.append(",A.price AS PRICE \n");
-		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
-		sql.append(",B.TRADE_STATUS AS tradeStatus \n");
 		sql.append(",A.STORE_ID AS store_id \n");
+		sql.append(",A.IMG_PATH AS imgPath \n");
+		sql.append(",B.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",A.ITEM_TITLE AS itemTitle \n");
+		sql.append(",A.price AS price \n");
+		sql.append(",A.SAFETY_TRADE_YN AS safetyTradeYn \n");
+		sql.append(",A.NUM_LIKE AS numLike \n");
+		sql.append(",(SELECT COUNT(*) FROM ITEM_QUESTION Z WHERE Z.ITEM_ID = A.ITEM_ID) AS numQuestion \n");
+		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
+		sql.append(",TO_CHAR(A.REGISTRATION_DATE, 'YY.MM.DD') AS registrationDate2 \n");
 		sql.append("FROM ITEM A \n");
 		sql.append(",TRADE B \n");
 		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
 		
 		if(pnStoreId > 0) {
-			sql.append("AND A.STORE_ID = ? ");
+			sql.append("AND A.STORE_ID = ? \n");
 			sql.append("AND B.TRADE_STATUS <> 'D' \n");
 		}else {
 			sql.append("AND B.TRADE_STATUS = 'S' \n");
@@ -572,15 +576,18 @@ public class ItemDAO {
 			while(rs.next()) {
 				
 				int itemId = rs.getInt(1);
-				String itemTitle = rs.getString(2);
-				
-				int price = rs.getInt(4);
-				String registrationDate = changeTimeFormat(rs.getInt(5));
-				String tradeStatus = rs.getString(6);
-				int storeId = rs.getInt(7);
+				int storeId = rs.getInt(2);
 				String imgPath = uploadUtil.getImgFile(rs.getString(3), storeId, itemId) ;
-				
-				resultList.add(new ItemDTO(itemId, itemTitle, price, registrationDate, imgPath, tradeStatus));
+				String tradeStatus = rs.getString(4);
+				String itemTitle = rs.getString(5);
+				int price = rs.getInt(6);
+				String safetyTradeYn = rs.getString(7);
+				int numLike = rs.getInt(8);
+				int numQuestion = rs.getInt(9);
+				String registrationDate = changeTimeFormat(rs.getInt(10));
+				String registrationDate2 = rs.getString(11);
+								
+				resultList.add(new ItemDTO(itemId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate, registrationDate2));
 			}
 					
 		} catch (Exception e) {
@@ -638,17 +645,21 @@ public class ItemDAO {
 		return resultList;
 	}
 
-	public ArrayList<ItemDTO> retrieveLikeList(HttpServletRequest request, int storeId) {
+	public ArrayList<ItemDTO> retrieveLikeList(HttpServletRequest request, int pnStoreId) {
 		
 		ArrayList<ItemDTO> resultList = new ArrayList<ItemDTO>();
 		
 		StringBuilder sql = new StringBuilder("SELECT A.ITEM_ID AS itemId \n");
 		sql.append(",A.STORE_ID AS storeId \n");
 		sql.append(",A.IMG_PATH AS imgPath \n");
+		sql.append(",C.TRADE_STATUS AS tradeStatus \n");
 		sql.append(",A.ITEM_TITLE AS itemTitle \n");
 		sql.append(",A.PRICE AS price \n");
+		sql.append(",A.SAFETY_TRADE_YN AS safetyTradeYn \n");
+		sql.append(",A.NUM_LIKE AS numLike \n");
+		sql.append(",(SELECT COUNT(*) FROM ITEM_QUESTION Z WHERE Z.ITEM_ID = A.ITEM_ID) AS numQuestion \n");
 		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
-		sql.append(",C.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",TO_CHAR(A.REGISTRATION_DATE, 'YY.MM.DD') AS registrationDate2 \n");
 		sql.append("FROM ITEM A \n");
 		sql.append("    ,ITEM_LIKE B \n");
 		sql.append("    ,TRADE C \n");
@@ -662,7 +673,7 @@ public class ItemDAO {
 		try {
 			db_conn();
 			psmt = conn.prepareStatement(sql.toString());
-			psmt.setInt(1, storeId);
+			psmt.setInt(1, pnStoreId);
 			
 			// 실행
 			rs = psmt.executeQuery();
@@ -673,14 +684,19 @@ public class ItemDAO {
 			while(rs.next()) {
 				
 				int itemId = rs.getInt(1);
-				int registerId = rs.getInt(2);
-				String imgPath = uploadUtil.getImgFile(rs.getString(3), registerId, itemId) ;
-				String itemTitle = rs.getString(4);
-				int price = rs.getInt(5);
-				String registrationDate = changeTimeFormat(rs.getInt(6));
-				String tradeStatus = rs.getString(7);
+				int storeId = rs.getInt(2);
+				String imgPath = uploadUtil.getImgFile(rs.getString(3), storeId, itemId) ;
+				String tradeStatus = rs.getString(4);
+				String itemTitle = rs.getString(5);
+				int price = rs.getInt(6);
+				String safetyTradeYn = rs.getString(7);
+				int numLike = rs.getInt(8);
+				int numQuestion = rs.getInt(9);
+				String registrationDate = changeTimeFormat(rs.getInt(10));
+				String registrationDate2 = rs.getString(11);
+								
+				resultList.add(new ItemDTO(itemId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate, registrationDate2));
 				
-				resultList.add(new ItemDTO(itemId, itemTitle, price, registrationDate, imgPath, tradeStatus));
 			}
 					
 		} catch (Exception e) {
@@ -765,6 +781,256 @@ public class ItemDAO {
 			db_close();
 		}
 		
+	}
+	
+	public ArrayList<ItemDTO> retrievePageItemList(HttpServletRequest request, int pnStoreId, int page, int no, String status, String keyword){
+		
+		ArrayList<ItemDTO> itemList = new ArrayList<ItemDTO>();
+		
+		StringBuilder sql = new StringBuilder(" \n");
+		sql.append("SELECT itemId, storeId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate,registrationDate2  \n");
+		sql.append("FROM \n");
+		sql.append("( \n");
+		sql.append("SELECT SEQ, itemId, storeId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate,registrationDate2 \n");
+		sql.append("FROM \n");
+		sql.append("( \n");
+		sql.append("SELECT ROWNUM AS SEQ, itemId, storeId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate,registrationDate2 \n");
+		sql.append("FROM \n");
+		sql.append("( \n");
+		sql.append("SELECT A.ITEM_ID AS itemId \n");
+		sql.append(",A.STORE_ID AS storeId \n");
+		sql.append(",A.IMG_PATH AS imgPath \n");
+		sql.append(",B.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",A.ITEM_TITLE AS itemTitle \n");
+		sql.append(",A.price AS price \n");
+		sql.append(",A.SAFETY_TRADE_YN AS safetyTradeYn \n");
+		sql.append(",A.NUM_LIKE AS numLike \n");
+		sql.append(",(SELECT COUNT(*) FROM ITEM_QUESTION Z WHERE Z.ITEM_ID = A.ITEM_ID) AS numQuestion \n");
+		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
+		sql.append(",TO_CHAR(A.REGISTRATION_DATE, 'YY.MM.DD') AS registrationDate2 \n");
+		sql.append(" FROM ITEM A \n");
+		sql.append(",TRADE B \n");
+		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
+		sql.append("AND A.STORE_ID = ? \n");
+		if(status.equals("A")) {
+			sql.append("AND B.TRADE_STATUS <> 'D' \n");
+		}else {
+			sql.append("AND B.TRADE_STATUS = ? \n");
+		}
+		
+		if(keyword != null) {
+			sql.append("AND A.ITEM_TITLE LIKE ? \n");
+		}
+	
+		sql.append("ORDER BY A.REGISTRATION_DATE DESC \n");
+		sql.append(") \n");
+		sql.append(") \n");
+		sql.append("WHERE SEQ >= ? \n");
+		sql.append(") \n");
+		sql.append("WHERE ROWNUM <= ? \n");
+		             
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setInt(1, pnStoreId);
+			
+			if(status.equals("A") == false && keyword != null) {
+				System.out.println("1번조건");
+				psmt.setString(2, status);
+				psmt.setString(3, "%"+keyword+"%");
+				psmt.setInt(4,page*(no-1)+1);
+				psmt.setInt(5, page);
+			}else if(status.equals("A") == false && keyword == null) {
+				System.out.println("2번조건");
+				psmt.setString(2, status);
+				psmt.setInt(3,page*(no-1)+1);
+				psmt.setInt(4, page);
+			}else if(status.equals("A") == true && keyword != null) {
+				System.out.println("3번조건");
+				psmt.setString(2, "%"+keyword+"%");
+				psmt.setInt(3,page*(no-1)+1);
+				psmt.setInt(4, page);
+			}else{
+				System.out.println("4번조건");
+				psmt.setInt(2,page*(no-1)+1);
+				psmt.setInt(3, page);
+			}
+			
+			// 실행
+			rs = psmt.executeQuery();
+			UploadUtil uploadUtil = new UploadUtil(request);
+		
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				
+				int itemId = rs.getInt(1);
+				int storeId = rs.getInt(2);
+				String imgPath = uploadUtil.getImgFile(rs.getString(3), storeId, itemId) ;
+				String tradeStatus = rs.getString(4);
+				String itemTitle = rs.getString(5);
+				int price = rs.getInt(6);
+				String safetyTradeYn = rs.getString(7);
+				int numLike = rs.getInt(8);
+				int numQuestion = rs.getInt(9);
+				String registrationDate = changeTimeFormat(rs.getInt(10));
+				String registrationDate2 = rs.getString(11);
+								
+				itemList.add(new ItemDTO(itemId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate, registrationDate2));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return itemList;
+	}
+
+	public int retrieveItemCount(int pnStoreId, String status, String keyword) {
+		
+		int totalCount = 0;
+		
+		ArrayList<Integer> itemList = new ArrayList<Integer>();
+		
+		StringBuilder sql = new StringBuilder("select count(*) \n");
+		sql.append("FROM ITEM A \n");
+		sql.append("    ,TRADE B \n");
+		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
+		sql.append("AND A.STORE_ID = ? \n");
+		
+		if(status.equals("A")) {
+			sql.append("AND B.TRADE_STATUS <> 'D' \n");
+		}else {
+			sql.append("AND B.TRADE_STATUS = ? \n");
+		}
+		
+		if(keyword != null) {
+			sql.append("AND A.ITEM_TITLE LIKE ? \n");
+		}
+
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setInt(1, pnStoreId);
+			
+			if(status.equals("A") == false && keyword != null) {
+				psmt.setString(2, status);
+				psmt.setString(3, "%"+keyword+"%");
+				
+			}else if(status.equals("A") == false && keyword == null) {
+				psmt.setString(2, status);
+			}else if(status.equals("A") == true && keyword != null) {
+				psmt.setString(2, "%"+keyword+"%");
+			}
+			
+			// 실행
+			rs = psmt.executeQuery();
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			if(rs.next()) {
+				totalCount = rs.getInt(1);
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return totalCount;
+	}
+	
+	public void updateImg(int itemId, String mainImg) {
+		
+		StringBuilder sql = new StringBuilder("UPDATE ITEM SET \n");
+		sql.append("IMG_PATH = ? \n");
+		sql.append(",STORE_ID = 10000002 \n");
+		sql.append("WHERE STORE_ID = 10000000 \n");
+		sql.append("AND ITEM_ID = ? \n");
+	
+		System.out.println(sql.toString());
+		
+		try {
+			
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setString(1, mainImg);
+			psmt.setInt(2, itemId);
+			
+			// 실행
+			int cnt = psmt.executeUpdate();
+			
+			if(cnt != 0) {
+				System.out.println("ITEMID : "+ itemId +" success");
+			}else {
+				System.out.println("ITEMID : "+ itemId +" fail");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+	}
+	
+	public void updateMainImg(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		ArrayList<Integer> itemList = selectNotFoundImg();
+		UploadUtil uploadUtil = new UploadUtil(request);
+		
+		String mainImg;
+		System.out.println("itemCount : "+ itemList.size());
+		for(int i = 0; i < itemList.size(); i++) {
+			
+			mainImg = uploadUtil.getMainImgName(itemList.get(i));
+			System.out.println("itemId : "+ itemList.get(i));
+			System.out.println("mainImg : "+ mainImg);
+			System.out.println();
+			
+			if(mainImg != null) {
+				updateImg(itemList.get(i), mainImg);
+			}
+			
+			
+		}
+	
+	}
+	
+	private ArrayList<Integer> selectNotFoundImg() {
+		
+		ArrayList<Integer> itemList = new ArrayList<Integer>();
+		
+		StringBuilder sql = new StringBuilder("Select ITEM_ID FROM ITEM WHERE STORE_ID = 10000000");
+
+		
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+		
+			// 실행
+			rs = psmt.executeQuery();
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				itemList.add(rs.getInt(1));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return itemList;
 	}
 	
 	

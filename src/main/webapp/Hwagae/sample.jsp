@@ -72,9 +72,10 @@
      		ArrayList<ItemDTO> itemList = itemDao.retrieveItemList(request);
      		session.setAttribute("itemList", itemList);
      	%>
-     
+     	
    		<div><!--Start Main  -->
    			<section class="section wb">
+   				
 	            <div class="container">
 	                <div class="row">
 	                	<!-- 여기다가 작업하세요! -->
@@ -85,6 +86,7 @@
                                         <div class="post-media">
                                             <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
                                                 <img src="${list.imgPath}" class="img-fluid">
+                                                <div class="safetyMark" style="display: ${list.safetyTradeYn eq 'Y' ? 'block' : 'none'}">안전</div>
                                                 <div class="hovereffect">
                                                 </div><!-- end hover -->
                                             </a>
@@ -103,9 +105,8 @@
 				</div> <!--end Container  -->
 			</section>   			
    		</div><!--end Main  -->
-  		<%@ include file="footer.jsp"%>
-  		<input type="hidden" name="errMsg" value="${errMsg}">
   	
+
     </div>
     <!-- Core JavaScript
     ================================================== -->

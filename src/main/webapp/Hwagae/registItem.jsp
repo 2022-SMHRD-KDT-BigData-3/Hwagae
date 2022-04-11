@@ -59,8 +59,14 @@
      
    		<div><!--Start Main  -->
    			
-   				<section class="section wb">
+   				<section class="section wb" style="padding-top: 0px;">
 		            <div class="container" style="font-size: 1rem;">
+		            
+		            	<div class="manageLocationBox">
+		      				<a href="registItem.jsp">상품등록</a>
+		      				<a href="ShowManageItemServiceCon.do?page=10&no=1&status=A">상품관리</a>
+		      			</div>
+		            
 		      			 <div class="row">
 		      			 	<div class="col-md-12 registInfo">
 		            			<h2>기본정보<span>*필수항목</span></h2>

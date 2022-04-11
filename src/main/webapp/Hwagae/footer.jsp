@@ -51,9 +51,11 @@
 								<dl>
 									<dt>(팀)화개장터</dt>
 									<dd>
-										팀장 : <span class="wh">조창욱<br></span> 팀원 : <br> <span class="wh">황승민
-										<br> 박민재 <br>
-										나종원<br> 김지은<br>
+										팀장 : <span class="wh">조창욱</span><br> 
+										팀원 : 황승민
+										      박민재
+											  나종원
+											  김지은
 									</dd>
 								</dl>
 							</div>

@@ -1,10 +1,3 @@
-<%@page import="Model.ItemDTO"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="Model.ItemDAO"%>
-<%@page import="Model.MemberDTO"%>
-<%@ page import="java.net.URLEncoder" %>
-<%@ page import="java.security.SecureRandom" %>
-<%@ page import="java.math.BigInteger" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -54,26 +47,12 @@
 	
 </head>
 <body>
-	<% 
-		// 로그인 정보를 담은 session 불러오기
-		// 로그인 성공 시 : info에는 값이 담겨있음.
-		// 로그인 실패 시 : info에는 null이 담겨있음.
-		MemberDTO info = (MemberDTO)session.getAttribute("info");
-		
-	%>
-	<!-- "<c:url value="/resources/images/loader.gif"/> -->
-    <div id="preloader">
+	
+    <div id="preloader"></div>
         
-    </div>
-
     <div id="wrapper">
     
 		<%@ include file="header.jsp"%>
-     	<%
-     		ItemDAO itemDao = new ItemDAO();
-     		ArrayList<ItemDTO> itemList = itemDao.retrieveItemList(request);
-     		session.setAttribute("itemList", itemList);
-     	%>
      	
    		<div><!--Start Main  -->
    			<section class="section wb">
@@ -117,5 +96,12 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
    
+   	<script>
+   		
+   		$(document).ready(function(e){
+   			$("#ipbHeaderKeyword").val("${keyword}");
+   		});
+   	
+    </script>
 </body>
 </html>

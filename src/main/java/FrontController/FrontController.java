@@ -19,6 +19,7 @@ import Controller.RegistItemServiceCon;
 import Controller.RetrieveCategoryServiceCon;
 import Controller.ShowItemServiceCon;
 import Controller.ShowManageItemServiceCon;
+import Controller.ShowSearchItemServiceCon;
 import Controller.ShowStoreInfoServiceCon;
 import Controller.JoinServiceCon;
 import Controller.LoginServiceCon;
@@ -51,13 +52,15 @@ public class FrontController extends HttpServlet {
 			sc = new ShowItemServiceCon();
 		} else if(result.equals("ShowStoreInfoServiceCon.do")) {  //내상점관리
 			sc = new ShowStoreInfoServiceCon();
-		} else if (result.equals("LoginServiceCon.do")) {
+		} else if (result.equals("LoginServiceCon.do")) { //로그인
     	 	 sc = new LoginServiceCon();
-       	} else if (result.equals("JoinServiceCon.do")) {
+       	} else if (result.equals("JoinServiceCon.do")) { //회원가입
     	  	 sc = new JoinServiceCon();
-       	} else if (result.equals("ShowManageItemServiceCon.do")) {
+       	} else if (result.equals("ShowManageItemServiceCon.do")) { //상품관리
        		 sc = new ShowManageItemServiceCon();
-       	}else if(result.equals("UdateMainImg.do")) {
+       	} else if(result.equals("ShowSearchItemServiceCon.do")) { //상품검색
+       		 sc = new ShowSearchItemServiceCon();
+       	} else if(result.equals("UdateMainImg.do")) {	//이미지파일폴더의 첫번째 이미지명을 상품대표 이미지로 수정(test데이터생성용)
        		
        		ItemDAO dao = new ItemDAO();
        		dao.updateMainImg(request);

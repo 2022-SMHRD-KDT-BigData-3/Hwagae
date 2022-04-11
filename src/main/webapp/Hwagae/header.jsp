@@ -72,7 +72,7 @@
             </div><!-- end header-logo -->
         </div><!-- end topbar -->
 
-        <div class="header-section">
+        <div class="header-section" style="height: 200px;">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -81,50 +81,77 @@
                         </div><!-- end logo -->
                     </div>
                 </div><!-- end row -->
-                <div class="messenger">
-        <div class="mesgcircle">
-            <div id="notificationScroll" class="msgscrol">
-                <span id="notificationMsg"></span>
-            </div>
-            <div class="mesgload">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </div>
-            </div><!-- end header-logo -->
-        </div><!-- end header -->
+         	<div class="messenger">
+        		<div class="mesgcircle" style="display: none;">
+            		<div id="notificationScroll" class="msgscrol">
+               			 <span id="notificationMsg"></span>
+            		</div>
+            		<div class="mesgload">
+                		<span></span>
+                		<span></span>
+               		 	<span></span>
+            		</div>
+        		</div>
+    		</div>
+           </div><!-- container -->
+        </div><!-- header-section -->
 
         <header class="header">
-            <div class="container">
-               <nav class="navbar navbar-inverse navbar-toggleable-md">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#cloapediamenu" aria-controls="cloapediamenu" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-md-center" id="cloapediamenu">
-                        <ul class="navbar-nav">
-                           
-                               
-                           <li class="nav-item">
-                                <a href="" id='catefont'><img src="images/category.png" id='category'><span>&nbsp;&nbsp;&nbsp;카테고리</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="registItem.jsp" id='sellfont' class="checkLogin"><img src="images/sell.png" id='sell'><span>&nbsp;&nbsp;&nbsp;판매하기</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="ShowStoreInfoServiceCon.do" id='storefont' class="checkLogin"><img src="images/storebig.png" id='storebig'><span>&nbsp;&nbsp;&nbsp;내상점</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont' class="checkLogin"><img src="images/talk.png" id='talk'><span>&nbsp;&nbsp;&nbsp;화개장톡</span></a>
-                            </li>  
-                           
-                        </ul>
-                    </div>
-                </nav>
+            <div class="container" style="padding : 0px 10%;">
+            	<div class="row">
+            		<div class="col-sm-12 managerSearchBox" style="margin-bottom: 20px;">
+            			<div style="height: 100%;">
+            				<input id="ipbHeaderKeyword" type="text" placeholder="상품명, 지역명, @상점명 입력" style="font-size: 15px; padding-left: 20px;"/>
+
+		      			 	<button id="btnHeaderSerach" class="material-icons">search</button>
+            			</div>
+            		</div>
+            		
+            		<div class="col-sm-3">
+            			<button class='navBox' id="btnCategory">
+            				<div><img src="images/category.png" id='category'></div>
+            				<div>카테고리</div>
+            			</button>
+            		</div>
+            		<div class="col-sm-3">
+            			<a href="registItem.jsp" id='sellfont' class="checkLogin navBox">
+            				<div><img src="images/sell.png" id='sell'></div>
+            				<div>판매하기</div>
+            			</a>
+            		</div>
+            		<div class="col-sm-3">
+            			<a href="ShowStoreInfoServiceCon.do" id='storefont' class="checkLogin navBox">
+            				<div><img src="images/storebig.png" id='storebig'></div>
+            				<div>내상점</div>
+            			</a>
+            		</div>
+            		<div class="col-sm-3">
+            			<a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont' class="checkLogin navBox">
+            				<div><img src="images/talk.png" id='talk'></div>
+            				<div>화개장톡</div>
+            			</a>
+            		</div>
+            		
+            		<div class="selectionAllBox selectionAllBox" style="height: 150px; margin: 10px 0px; display:none;">
+						<div id="section1" class="col-md-4 selectionBox">
+							
+						</div>
+						<div id="section2" class="col-md-4 selectionBox">
+							중분류
+						</div>
+						<div id="section3" class="col-md-4 selectionBox">
+							대분류
+						</div>
+					</div>
+            		
+            	</div>
+            </div>
+            	   
+            
             </div><!-- end container --> 
             <link rel="stylesheet" href="css/header.css">         
         </header><!-- end header -->
+        
 <script src="js/jquery.min.js"></script>        
 <script>
 	document.addEventListener("DOMContentLoaded", () => { 
@@ -172,8 +199,6 @@
 		}
 	%>
 	
-	
-	
 	$(".checkLogin").click(function(e){
 		let href = $(this).attr("href");
 		let loginYn = '<%=loginYn%>';
@@ -191,4 +216,169 @@
 		
 	});
 
+
+	$("#btnHeaderSerach").click(function(e){	
+		searchKeywordItem();
+	});
+	
+	$("#ipbHeaderKeyword").keypress(function(e){
+		if(e.keyCode = 13){
+			searchKeywordItem();
+		}
+	});
+	
+	let selectedSection1 = -1;
+	let selectedSection2 = -1;
+	let selectedSection3 = -1;
+	
+	$("#btnCategory").click(function(e){
+		
+		if($(".selectionAllBox").css("display") == "none"){
+			$(".selectionAllBox").show();
+		}else{
+			$(".selectionAllBox").hide();
+		}
+		
+		if($("#section1 > ui").length == 0){
+			setCategory(null,null);
+		}
+	
+		
+	});
+	
+	$(document).on("mouseover" , ".btnCategory", function() {              
+		
+		let sectionLevel = $(this).data("level");
+		let sectionValue = $(this).data("value");
+
+		if(sectionLevel == "section1" && selectedSection1 != sectionValue){		
+			
+			//카테고리 ui 초기화
+			$("#section2").text("");
+			$("#section3").text("소분류");
+			
+			//하위 selectedSection 변수값 초기화
+			selectedSection2 = -1;
+			selectedSection3 = -1;
+			
+			//카테고리 정보 로드
+			setCategory(sectionValue,null);
+			selectedSection1 = sectionValue;	
+			
+		}else if(sectionLevel == "section2" && selectedSection2 != sectionValue){		
+			
+			//카테고리 ui 초기화
+			$("#section3").text("");
+
+			//하위 selectedSection 변수값 초기화
+			selectedSection3 = -1;
+			
+			setCategory(selectedSection1,sectionValue);
+			selectedSection2 = sectionValue;	
+		}else{		
+			selectedSection3 = sectionValue;
+		}
+		
+	        
+     }); 
+	
+	$(document).on("click" , ".btnCategory", function() {
+	
+		let catSeq = $(this).data("catSeq");
+		
+		location.href = "ShowSearchItemServiceCon.do?catSeq="+catSeq;
+	});
+	
+	
+	function searchKeywordItem(){
+		let keyword = $("#ipbHeaderKeyword").val();
+		
+		if(keyword.length == 0){
+			alert("키워드를 입력해 주세요.");
+			return;
+		}
+		location.href = "ShowSearchItemServiceCon.do?q="+keyword;
+	}
+	
+	function setCategory(section1, section2){
+		
+		section = {
+			"section1" : section1
+			,"section2" : section2
+		};
+		
+		$.ajax({
+			url : 'RetrieveCategoryServiceCon.ajax'
+			,type : 'GET'
+			,data : section
+			,dataType : 'json'
+			,contentType : "application/json;charset=UTF-8"
+			,success : function(data) {
+				
+				let ui = $("<ui>");
+				let li;
+				let button;
+				
+				for(let i = 0; i < data.length; i++){
+				
+					li = $("<li>");
+					button = $("<button>", { class : "btnCategory", text : data[i].sectionInfo});
+					button.data("level", getSectionLevel(section1, section2));
+					button.data("value", getSectionValue(section1, section2, data[i]));
+					button.data("catSeq", data[i].catSeq);
+					
+					li.append(button);
+					ui.append(li);
+				
+				}
+				
+				if(section1 == null && section2 ==  null){ //대분류 카테고리 생성
+					$("#section1").append(ui);
+				}else if(section1 != null && section2 == null){ //중분류 카테고리 생성
+					$("#section2").append(ui);
+				}else{ //소분류 카테고리 생성
+					$("#section3").append(ui);
+				}
+				
+  			}, 
+			error : function(err) {
+  				console.log(err);
+			}
+  		});
+		
+	}
+	
+	function getSectionValue(section1, section2, data){
+		
+		let result;
+	
+		if(section1 == null && section2 ==  null){ //대분류 카테고리 생성
+			result = data.section1;
+		}else if(section1 != null && section2 == null){ //중분류 카테고리 생성
+			result = data.section2;
+		}else{
+			result = data.section3;
+		}
+	
+		return result;
+	}
+	
+	function getSectionLevel(section1, section2){
+	
+		let result;
+	
+		if(section1 == null && section2 ==  null){ //대분류 카테고리 생성
+			result = "section1";
+		}else if(section1 != null && section2 == null){ //중분류 카테고리 생성
+			result = "section2";
+		}else{
+			result = "section3";
+		}
+	
+		return result;
+	}
+	
+	
+	
+	
 </script>

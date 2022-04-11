@@ -41,6 +41,7 @@
     <!-- Colors for this template -->
     <link href="css/colors.css" rel="stylesheet">
     
+    <link href="css/footer.css" rel="stylesheet">
     <link href="css/changwookcho.css" rel="stylesheet">
 	<script src="js/jquery.min.js"></script>
 	

@@ -184,6 +184,7 @@ imageList  ui{
     outline: none;
     border : 0;
     text-align: left;
+    font-size: 18px;
 }
 .selectionBox > ui > li > button:hover{
     background-color: whitesmoke;
@@ -747,12 +748,12 @@ ul.imgs li{
     border-radius: 2px;
 } 
 
-.managerSearchBox > .col-sm-5{
+.managerSearchBox > div{
 	position: relative;
 	padding-right: 0px;
 }
 
-.managerSearchBox > .col-sm-5 > button{
+.managerSearchBox > div > button{
 	position: absolute;
 	right: 0px;
 	height: 100%;
@@ -817,6 +818,34 @@ ul.imgs li{
     white-space: nowrap;	
     
 }
+
+.navBox > div:nth-child(1){
+	width:30px;
+	float: left;
+}
+
+.navBox img{
+	width:100%;
+}
+
+.navBox > div:nth-child(2){
+    float: left;
+    height: 100%;
+    line-height: 40px;
+    font-size: 20px;
+    margin-left: 20px;
+    font-weight: bolder;
+    font-family: 'NanumBarunGothic', 'serif';
+}
+
+#btnCategory{
+	background-color: transparent;
+    border: none;
+} 
+
+#btnCategory:focus{
+	outline: none; 
+} 
 
 
 

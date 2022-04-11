@@ -1032,6 +1032,224 @@ public class ItemDAO {
 		
 		return itemList;
 	}
+
+	public ArrayList<ItemDTO> searchKeywordItemList(HttpServletRequest request, String keyword) {
+		
+		ArrayList<ItemDTO> resultList = new ArrayList<ItemDTO>();
+		
+		//상품명 기준 조회
+		StringBuilder sql = new StringBuilder("SELECT A.ITEM_ID AS itemId \n");
+		sql.append(",A.STORE_ID AS storeId \n");
+		sql.append(",A.IMG_PATH AS imgPath \n");
+		sql.append(",B.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",A.ITEM_TITLE AS itemTitle \n");
+		sql.append(",A.price AS price \n");
+		sql.append(",A.SAFETY_TRADE_YN AS safetyTradeYn \n");
+		sql.append(",A.NUM_LIKE AS numLike \n");
+		sql.append(",(SELECT COUNT(*) FROM ITEM_QUESTION Z WHERE Z.ITEM_ID = A.ITEM_ID) AS numQuestion \n");
+		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
+		sql.append(",TO_CHAR(A.REGISTRATION_DATE, 'YY.MM.DD') AS registrationDate2 \n");
+		sql.append("FROM ITEM A \n");
+		sql.append(",TRADE B \n");
+		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
+		sql.append("AND B.TRADE_STATUS = 'S' \n");
+		sql.append("AND A.ITEM_TITLE LIKE ? \n");
+		sql.append("UNION \n");
+		//태그 기준 조회
+		sql.append("SELECT A.ITEM_ID AS itemId \n");
+		sql.append(",A.STORE_ID AS storeId \n");
+		sql.append(",A.IMG_PATH AS imgPath \n");
+		sql.append(",B.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",A.ITEM_TITLE AS itemTitle \n");
+		sql.append(",A.price AS price \n");
+		sql.append(",A.SAFETY_TRADE_YN AS safetyTradeYn \n");
+		sql.append(",A.NUM_LIKE AS numLike \n");
+		sql.append(",(SELECT COUNT(*) FROM ITEM_QUESTION Z WHERE Z.ITEM_ID = A.ITEM_ID) AS numQuestion \n");
+		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
+		sql.append(",TO_CHAR(A.REGISTRATION_DATE, 'YY.MM.DD') AS registrationDate2 \n");
+		sql.append("FROM ITEM A \n");
+		sql.append(",TRADE B \n");
+		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
+		sql.append("AND B.TRADE_STATUS = 'S' \n");
+		sql.append("AND A.RELATION_TAG LIKE ? \n");
+		
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setString(1, keyword);
+			psmt.setString(2, keyword);
+			
+			// 실행
+			rs = psmt.executeQuery();
+			
+			UploadUtil uploadUtil = new UploadUtil(request);
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				
+				int itemId = rs.getInt(1);
+				int storeId = rs.getInt(2);
+				String imgPath = uploadUtil.getImgFile(rs.getString(3), storeId, itemId) ;
+				String tradeStatus = rs.getString(4);
+				String itemTitle = rs.getString(5);
+				int price = rs.getInt(6);
+				String safetyTradeYn = rs.getString(7);
+				int numLike = rs.getInt(8);
+				int numQuestion = rs.getInt(9);
+				String registrationDate = changeTimeFormat(rs.getInt(10));
+				String registrationDate2 = rs.getString(11);
+								
+				resultList.add(new ItemDTO(itemId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate, registrationDate2));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return resultList;
+	}
+	
+	public int retrieveStoreId(String keyword) {
+		int storeId =-1;
+		String storeName = keyword.substring(1); //@삭제
+		
+		StringBuilder sql = new StringBuilder("SELECT STORE_ID FROM STORE WHERE STORE_NAME = ?");
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setString(1, storeName);
+			
+			// 실행
+			rs = psmt.executeQuery();
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				storeId = rs.getInt(1);
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return storeId;
+	}
+
+	public String[] retrieveCategoryInfo(String catSeq) {
+		
+		
+		String[] result = new String[3];
+		
+		StringBuilder sql = new StringBuilder("SELECT SECTION1, SECTION2, SECTION3 FROM CATEGORY WHERE CAT_SEQ = ? ");
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setString(1, catSeq);
+			
+			// 실행
+			rs = psmt.executeQuery();
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			if(rs.next()) {
+				result[0] = rs.getString(1);
+				result[1] = rs.getString(2);
+				result[2] = rs.getString(3);
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return result;
+	}
+
+	public ArrayList<ItemDTO> searchCategoryItemList(HttpServletRequest request, String[] categoryInfo) {
+		
+		ArrayList<ItemDTO> resultList = new ArrayList<ItemDTO>();
+		
+		//상품명 기준 조회
+		StringBuilder sql = new StringBuilder("SELECT A.ITEM_ID AS itemId \n");
+		sql.append(",A.STORE_ID AS storeId \n");
+		sql.append(",A.IMG_PATH AS imgPath \n");
+		sql.append(",B.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",A.ITEM_TITLE AS itemTitle \n");
+		sql.append(",A.price AS price \n");
+		sql.append(",A.SAFETY_TRADE_YN AS safetyTradeYn \n");
+		sql.append(",A.NUM_LIKE AS numLike \n");
+		sql.append(",(SELECT COUNT(*) FROM ITEM_QUESTION Z WHERE Z.ITEM_ID = A.ITEM_ID) AS numQuestion \n");
+		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
+		sql.append(",TO_CHAR(A.REGISTRATION_DATE, 'YY.MM.DD') AS registrationDate2 \n");
+		sql.append("FROM ITEM A \n");
+		sql.append(",TRADE B \n");
+		sql.append(",CATEGORY C \n");
+		sql.append("WHERE A.ITEM_ID = B.ITEM_ID \n");
+		sql.append("AND A.ITEM_CATEGORY = C.CAT_SEQ \n");
+		sql.append("AND B.TRADE_STATUS = 'S' \n");
+		
+		if(!categoryInfo[0].equals("00")) {		
+			sql.append(String.format("AND C.SECTION1 = '%s' \n", categoryInfo[0]));
+		}
+		
+		if(!categoryInfo[1].equals("00")) {		
+			sql.append(String.format("AND C.SECTION2 = '%s' \n", categoryInfo[1]));
+		}
+		
+		if(!categoryInfo[2].equals("00")) {		
+			sql.append(String.format("AND C.SECTION3 = '%s' \n", categoryInfo[2]));
+		}
+		
+		
+		System.out.println(sql.toString());
+
+		try {
+			db_conn();
+			psmt = conn.prepareStatement(sql.toString());
+			
+			// 실행
+			rs = psmt.executeQuery();
+			
+			UploadUtil uploadUtil = new UploadUtil(request);
+			
+			// 결과를 꺼내서 ArrayList로 만들기
+			while(rs.next()) {
+				
+				int itemId = rs.getInt(1);
+				int storeId = rs.getInt(2);
+				String imgPath = uploadUtil.getImgFile(rs.getString(3), storeId, itemId) ;
+				String tradeStatus = rs.getString(4);
+				String itemTitle = rs.getString(5);
+				int price = rs.getInt(6);
+				String safetyTradeYn = rs.getString(7);
+				int numLike = rs.getInt(8);
+				int numQuestion = rs.getInt(9);
+				String registrationDate = changeTimeFormat(rs.getInt(10));
+				String registrationDate2 = rs.getString(11);
+								
+				resultList.add(new ItemDTO(itemId, imgPath, tradeStatus, itemTitle, price, safetyTradeYn, numLike, numQuestion, registrationDate, registrationDate2));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db_close();
+		}
+		
+		return resultList;
+	}
+	
+	
+	
 	
 	
 }

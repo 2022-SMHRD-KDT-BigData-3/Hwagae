@@ -107,16 +107,16 @@
                            
                                
                            <li class="nav-item">
-                                <a href="" id='catefont'><img src="images/category.png" id='category'><span>카테고리</span></a>
+                                <a href="" id='catefont'><img src="images/category.png" id='category'><span>&nbsp;&nbsp;&nbsp;카테고리</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="registItem.jsp" id='sellfont' class="checkLogin"><img src="images/sell.png" id='sell'><span>판매하기</span></a>
+                                <a href="registItem.jsp" id='sellfont' class="checkLogin"><img src="images/sell.png" id='sell'><span>&nbsp;&nbsp;&nbsp;판매하기</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="ShowStoreInfoServiceCon.do" id='storefont' class="checkLogin"><img src="images/storebig.png" id='storebig'><span>내상점</span></a>
+                                <a href="ShowStoreInfoServiceCon.do" id='storefont' class="checkLogin"><img src="images/storebig.png" id='storebig'><span>&nbsp;&nbsp;&nbsp;내상점</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont' class="checkLogin"><img src="images/talk.png" id='talk'><span>화개장톡</span></a>
+                                <a href="./HwagaeTalk.jsp?roomstate=1" id='talkfont' class="checkLogin"><img src="images/talk.png" id='talk'><span>&nbsp;&nbsp;&nbsp;화개장톡</span></a>
                             </li>  
                            
                         </ul>

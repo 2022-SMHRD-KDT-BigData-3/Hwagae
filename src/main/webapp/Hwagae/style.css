@@ -29,7 +29,9 @@ body {
     line-height: 26px;
     background-color: #ffffff;
 }
-
+li.nav-item {
+    margin-right: 60px;
+}
 h1,
 h2,
 h3,
@@ -186,7 +188,7 @@ a {
 }
 
 .navbar-nav > .nav-item > a{
-	font-size: 20px !important;
+	font-size: 22px !important;
 }
 
 .header .dropdown-menu {

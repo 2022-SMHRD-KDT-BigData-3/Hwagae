@@ -49,7 +49,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="topsearch text-right">
                         	<%if (ws_info != null) {%>
-								<a href="naverLogOut.jsp" target="_self" onclick="sendLogoutCommand()"><img src="images/logout.png" id='logout'>&nbsp;로그아웃&nbsp;</a>
+								<a href="naverLogOut.jsp" target="_self" onclick="sendLogoutCommand()" class="font_Gothic"><img src="images/logout.png" id='logout'>&nbsp;로그아웃&nbsp;</a>
 							<%} else {%>
 							<%
 							String clientId = "iYurGV0OE6snPVlinTga";//애플리케이션 클라이언트 아이디값";
@@ -62,9 +62,9 @@
 							apiURL += "&state=" + state;
 							session.setAttribute("state", state);
 							%>
-							<a href="<%=apiURL%>"><img src="images/login.png" id='login'>&nbsp;로그인/회원가입&nbsp;</a>
+							<a href="<%=apiURL%>"><img src="images/login.png" id='login' class="font_Gothic">&nbsp;로그인/회원가입&nbsp;</a>
 							<%}%> 
-                            <a href="ShowStoreInfoServiceCon.do" class="checkLogin"><img src="images/storesmall.png" id='storesmall'></i>&nbsp;내상점&nbsp;</a></li>
+                            <a href="ShowStoreInfoServiceCon.do" class="checkLogin" class="font_Gothic"><img src="images/storesmall.png" id='storesmall'></i>&nbsp;내상점&nbsp;</a></li>
                         </div><!-- end search -->
                     </div><!-- end col -->
                     
@@ -132,14 +132,14 @@
             			</a>
             		</div>
             		
-            		<div class="selectionAllBox selectionAllBox" style="height: 150px; margin: 10px 0px; display:none;">
-						<div id="section1" class="col-md-4 selectionBox">
+            		<div class="selectionAllBox selectionhdAllBox" style="height: 150px; margin: 10px 0px; display:none;">
+						<div id="hdSection1" class="col-md-4 selectionBox">
 							
 						</div>
-						<div id="section2" class="col-md-4 selectionBox">
+						<div id="hdSection2" class="col-md-4 selectionBox">
 							중분류
 						</div>
-						<div id="section3" class="col-md-4 selectionBox">
+						<div id="hdSection3" class="col-md-4 selectionBox">
 							대분류
 						</div>
 					</div>
@@ -233,20 +233,20 @@
 	
 	$("#btnCategory").click(function(e){
 		
-		if($(".selectionAllBox").css("display") == "none"){
-			$(".selectionAllBox").show();
+		if($(".selectionhdAllBox").css("display") == "none"){
+			$(".selectionhdAllBox").show();
 		}else{
-			$(".selectionAllBox").hide();
+			$(".selectionhdAllBox").hide();
 		}
 		
-		if($("#section1 > ui").length == 0){
+		if($("#hdSection1 > ui").length == 0){
 			setCategory(null,null);
 		}
 	
 		
 	});
 	
-	$(document).on("mouseover" , ".btnCategory", function() {              
+	$(document).on("mouseover" , ".btnHdCategory", function() {              
 		
 		let sectionLevel = $(this).data("level");
 		let sectionValue = $(this).data("value");
@@ -254,8 +254,8 @@
 		if(sectionLevel == "section1" && selectedSection1 != sectionValue){		
 			
 			//카테고리 ui 초기화
-			$("#section2").text("");
-			$("#section3").text("소분류");
+			$("#hdSection2").text("");
+			$("#hdSection3").text("소분류");
 			
 			//하위 selectedSection 변수값 초기화
 			selectedSection2 = -1;
@@ -268,7 +268,7 @@
 		}else if(sectionLevel == "section2" && selectedSection2 != sectionValue){		
 			
 			//카테고리 ui 초기화
-			$("#section3").text("");
+			$("#hdSection3").text("");
 
 			//하위 selectedSection 변수값 초기화
 			selectedSection3 = -1;
@@ -282,7 +282,7 @@
 	        
      }); 
 	
-	$(document).on("click" , ".btnCategory", function() {
+	$(document).on("click" , ".btnHdCategory", function() {
 	
 		let catSeq = $(this).data("catSeq");
 		
@@ -322,7 +322,7 @@
 				for(let i = 0; i < data.length; i++){
 				
 					li = $("<li>");
-					button = $("<button>", { class : "btnCategory", text : data[i].sectionInfo});
+					button = $("<button>", { class : "btnHdCategory", text : data[i].sectionInfo});
 					button.data("level", getSectionLevel(section1, section2));
 					button.data("value", getSectionValue(section1, section2, data[i]));
 					button.data("catSeq", data[i].catSeq);
@@ -333,11 +333,11 @@
 				}
 				
 				if(section1 == null && section2 ==  null){ //대분류 카테고리 생성
-					$("#section1").append(ui);
+					$("#hdSection1").append(ui);
 				}else if(section1 != null && section2 == null){ //중분류 카테고리 생성
-					$("#section2").append(ui);
+					$("#hdSection2").append(ui);
 				}else{ //소분류 카테고리 생성
-					$("#section3").append(ui);
+					$("#hdSection3").append(ui);
 				}
 				
   			}, 

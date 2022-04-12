@@ -1,3 +1,7 @@
+<%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
+<%@page import="java.util.LinkedHashMap"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="Model.ItemDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -146,6 +150,59 @@
 							
 							<div class="title" ID="qwe">상품정보</div>
 							<hr>
+							
+							<%
+								ItemDTO itemDto = (ItemDTO) session.getAttribute("itemDto");
+								String vendorUrlInfo = itemDto.getVendorUrlInfo();
+								String vendorUrl = itemDto.getVendorUrl();
+							%>
+							
+							
+							
+							<%if(vendorUrlInfo != null){%>
+								
+								<div class="media">
+	                                    
+	                                     <img src="./images/hwagaeLogo.png" alt="" class="rounded-circle">
+	                                    
+	                                     <div id="modalInfo"class="media-body" style="font-weight: bold;line-height: 70px;font-size: 1.2rem;">
+	                                      	화개장터에서 이 상품에 대해서 안내해 드립니다!
+	                                     </div>
+	                                     <%if(vendorUrl != null){%>
+										 <div class="vendorUrlBox" style="height: 80px; line-height: 60px;">
+											<a class="btn btn-warning" href="<%=vendorUrl%>">구매처로 이동</a>
+										 </div>
+										 <%}%>
+	                            </div>
+								
+								<div class="modalTableBox">
+	                             
+	                             	<table class="table table-bordered table-striped" style="table-layout:fixed;">
+	                             		 <colgroup style="width: 40%;"></colgroup>
+	                             		 <colgroup style="width: 60%;"></colgroup>
+										 <tbody>
+										 
+										 	<%
+										 	ObjectMapper mapper = new ObjectMapper();
+											LinkedHashMap<String, String> vendorUrlInfoMap = mapper.readValue(vendorUrlInfo, LinkedHashMap.class);
+										 	%>
+										 
+										   <%for ( String key : vendorUrlInfoMap.keySet() ) {%>
+										   		<tr>
+										   			<td><%=key%></td>
+										   			<td><%=vendorUrlInfoMap.get(key)%></td>
+										   		</tr>
+											<%}%>
+										   
+										 </tbody> 	
+									</table>
+	                             
+	                             </div>
+								
+								<hr>
+							<%}%>
+							
+							
 						    <div id="itmeInfoBox">
 						    	${itemDto.itemInfo}
 						    </div>

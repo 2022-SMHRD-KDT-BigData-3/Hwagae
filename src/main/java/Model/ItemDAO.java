@@ -222,6 +222,8 @@ public class ItemDAO {
 		sql.append(",IMG_PATH \n");
 		sql.append(",NUM_LIKE \n");
 		sql.append(",REGISTRATION_DATE \n");
+		sql.append(",VENDOR_URL \n");
+		sql.append(",VENDOR_URL_INFO \n");
 		sql.append(") VALUES( \n");
 		sql.append("? \n");
 		sql.append(",? \n");
@@ -239,7 +241,9 @@ public class ItemDAO {
 		sql.append(",? \n");
 		sql.append(",? \n");
 		sql.append(",? \n");
-		sql.append(",SYSDATE )");
+		sql.append(",SYSDATE \n");
+		sql.append(",? \n");
+		sql.append(",?) \n");
 		
 		System.out.println(sql.toString());
 		
@@ -263,6 +267,8 @@ public class ItemDAO {
 			psmt.setString(14, dto.getSafetyTradeYn());
 			psmt.setString(15, dto.getImgPath());
 			psmt.setInt(16, 0);
+			psmt.setString(17, dto.getVendorUrl());
+			psmt.setString(18, dto.getVendorUrlInfo());
 			
 			// 실행
 			int cnt = psmt.executeUpdate();
@@ -346,6 +352,8 @@ public class ItemDAO {
 		sql.append(",A.NUM_LIKE AS numLike \n");
 		sql.append(",ROUND((SYSDATE - A.REGISTRATION_DATE) * 24 * 60) AS registrationDate \n");
 		sql.append(",C.TRADE_STATUS AS tradeStatus \n");
+		sql.append(",NVL(A.VENDOR_URL,'') AS vendorUrl \n");
+		sql.append(",NVL(A.VENDOR_URL_INFO, '') AS vendorUrlInfo \n");
 		sql.append("FROM ITEM A \n");
 		sql.append("    ,CATEGORY B \n");
 		sql.append("    ,TRADE C \n");
@@ -380,8 +388,10 @@ public class ItemDAO {
 				int numLike = rs.getInt(14);
 				String registrationDate = changeTimeFormat(rs.getInt(15));
 				String tradeStatus = rs.getString(16);
+				String vendorUrl = rs.getString(17);
+				String vendorUrlInfo = rs.getString(18);
 			
-				dto = new ItemDTO(itemId, storeId, itemTitle, itemInfo, itemCategory, itemStatus, exchangeYn, price, includeDeliveryPriceYn, relationTag, tradeArea, stock, SafetyTradeYn, numLike, registrationDate, tradeStatus);
+				dto = new ItemDTO(itemId, storeId, itemTitle, itemInfo, itemCategory, itemStatus, exchangeYn, price, includeDeliveryPriceYn, relationTag, tradeArea, stock, SafetyTradeYn, numLike, registrationDate, tradeStatus,vendorUrl,vendorUrlInfo);
 				
 			};
 			

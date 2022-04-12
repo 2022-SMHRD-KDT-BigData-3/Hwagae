@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import Command.AjaxCommand;
 import Controller.ChangeItemLike;
+import Controller.CrawlingItemInfoServiceCon;
 import Controller.FileUploadServiceCon;
 import Controller.InsertItemQuestion;
 import Controller.ModifyStoreInfoServiceCon;
@@ -66,6 +67,8 @@ public class AjaxController extends HttpServlet {
     	  sc = new UpdateTradeInfo();
       }else if(result.equals("RetrieveManageItem.ajax")) {
     	  sc = new RetrieveManageItem();
+      }else if(result.equals("CrawlingItemInfoServiceCon.ajax")) {
+    	  sc = new CrawlingItemInfoServiceCon();
       }
       
       sc.execute(request, response);

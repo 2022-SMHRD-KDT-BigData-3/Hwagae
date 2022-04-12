@@ -1,5 +1,11 @@
 @charset "EUC-KR";
 
+@font-face { font-family: 'NanumBarunGothic';
+src: url('/fonts/NanumBarunGothic.eot');
+src: url('/fonts/NanumBarunGothic.eot') format('embedded-opentype'),
+url('/fonts/NanumBarunGothic.woff') format('woff');}
+
+
 body > div.header-section > div > div.row > div > div > a > img{
 	max-width: 324px;
     max-width: 100%;
@@ -27,4 +33,8 @@ body > div.header-section > div > div.row > div > div > a > img{
     font-weight: bold;
     color: green;
     content: 'N';
+}
+
+.font_Gothic{
+	font-family: 'NanumBarunGothic', 'serif';
 }

@@ -25,6 +25,7 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,400i,500,700" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700,900" rel="stylesheet"> 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> 
 	
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -46,6 +47,10 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	
 </head>
 <body>
 
@@ -56,7 +61,7 @@
     <div id="wrapper">
     
 		<%@ include file="header.jsp"%>
-     
+    
    		<div><!--Start Main  -->
    			
    				<section class="section wb" style="padding-top: 0px;">
@@ -65,6 +70,7 @@
 		            	<div class="manageLocationBox">
 		      				<a href="registItem.jsp">상품등록</a>
 		      				<a href="ShowManageItemServiceCon.do?page=10&no=1&status=A">상품관리</a>
+		      				
 		      			</div>
 		            
 		      			 <div class="row">
@@ -170,6 +176,18 @@
 						
 						<div class="row">
 							<div class="col-md-2 registhd">
+						 		구매처URL
+						 	</div>
+						 	<div class="col-md-10 ItemTitleBox">
+		            			<input type="text" name="vendorUrl" placeholder="구매처URL">
+		            			<span id="titleRoll"><label class="material-icons">info</label>판매처를 알고 계시나요 ? 판매처를 등록하시면 화개장터에서 상품정보를 알려드립니다!</span>
+		            		</div>
+						</div>
+						
+						<hr>
+						
+						<div class="row">
+							<div class="col-md-2 registhd">
 						 		상태<span class="mandatoryMark">*</span>
 						 	</div>
 						 	<div class="col-md-10">
@@ -214,7 +232,7 @@
 						</div>
 						
 						<hr>
-						
+
 						<div class="row">
 							<div class="col-md-2 registhd">
 						 		연관태그
@@ -271,6 +289,7 @@
 						</div>
 						
 					</div> <!--end Container  -->
+					
 				</section>   
 				
 				<div id="registButtonArea">
@@ -281,13 +300,17 @@
    				<input type="hidden" name="storeId" value="${info.store_id}">
    								
    		</div><!--end Main  -->
-  
+   		
+  		<div id = "progressBar"></div>
+		<div id="divModalItemInfo"></div>
+  	
     </div>
     <!-- Core JavaScript
     ================================================== -->
     <script src="js/tether.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
+    <script src="js/hwagae.js"></script>
     <script src="js/registItem.js"></script>
 
 </body>

@@ -43,8 +43,11 @@ public class RegistItemServiceCon implements AjaxCommand{
 			int stock = Integer.parseInt(request.getParameter("stock"));
 			String safetyTradeYn = request.getParameter("safetyTradeYn");
 			String imgPath = request.getParameter("imgPath");
+			String vendorUrl = request.getParameter("vendorUrl");
+			String vendorUrlInfo = request.getParameter("vendorUrlInfo");
 			
-			ItemDTO dto = new ItemDTO(storeId, itemTitle, itemInfo, itemCategory, itemStatus, exchangeYn, price, includeDeliveryPriceYn, relationTag, tradeArea, stock, safetyTradeYn, imgPath); 
+			
+			ItemDTO dto = new ItemDTO(storeId, itemTitle, itemInfo, itemCategory, itemStatus, exchangeYn, price, includeDeliveryPriceYn, relationTag, tradeArea, stock, safetyTradeYn, imgPath, vendorUrl, vendorUrlInfo); 
 			ItemDAO dao = new ItemDAO();
 			int itemId = dao.insertItem(dto);
 			

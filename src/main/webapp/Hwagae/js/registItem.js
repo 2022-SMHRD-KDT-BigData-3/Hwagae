@@ -1,5 +1,11 @@
 (function(){
 	
+	_e = window;
+	_e.progressBar.load();
+	_e.modal.load("#divModalItemInfo", "modalItemInfo.html"); //상품정보검색 팝업 셋팅
+	_e.urlItemInfo= {};
+	_e.useUrlInfoYn = "N";
+	
 	let fileList = new Array();
 	
 	$(document).ready(function() {
@@ -144,6 +150,29 @@
 		}
 		
 	});
+	
+	$("input[name=vendorUrl]").blur(async function(e){
+		
+		try{
+			_e.progressBar.show();
+			
+			let data = await crawlingItemInfo($(this).val());
+			_e.urlItemInfo =data;
+			
+			_e.modal.show("modalItemInfo");
+			
+		}catch(err){
+			alert(err);
+		}finally{
+			_e.progressBar.hide();
+		}
+		
+	});
+	
+	$("#btnTest").click(function(e){
+		_e.modal.show("modalItemInfo");
+	});
+	
 	
 	
 	function getTextLength(str) {
@@ -333,9 +362,6 @@
 		
 	}
 	
-	function checkRequestValue(){
-		return true;
-	}
 
 	function registItem(){
 		return new Promise(function(resolve, reject){
@@ -354,6 +380,8 @@
 				,"stock" : $("input[name=stock]").val()
 				,"safetyTradeYn" : $("input[name=safetyTradeYn]").is(":checked") ? "Y" : "N"
 				,"imgPath" : fileList[0].name	
+				,"vendorUrl" : $("input[name=vendorUrl]").val()
+				,"vendorUrlInfo" : _e.useUrlInfoYn == "Y" ? JSON.stringify(_e.urlItemInfo) : ""
 			}
 		
 			console.log(requestParam);
@@ -405,5 +433,35 @@
 		 });
 	
 	}
+	
+	function crawlingItemInfo(url){
+		return new Promise(function(resolve,reject){
+			
+			$.ajax({
+				url : 'CrawlingItemInfoServiceCon.ajax'
+				,type : 'GET'
+				,data : {"url" : url}
+				,dataType : 'json'
+				,contentType : "application/json;charset=UTF-8"
+				,success : function(data) {
+					
+					if(data.rsltCd == 0){
+						resolve(data.itemInfo);
+					}else{
+						reject(data.errMsg);
+					}
+					return;
+	  			}, 
+				error : function(err) {
+	  				reject(err);
+					return;
+				}
+			});
+			
+			
+		});
+	}
+	
+	
 		
 }());

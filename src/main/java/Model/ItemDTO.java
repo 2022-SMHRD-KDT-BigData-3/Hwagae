@@ -21,6 +21,8 @@ public class ItemDTO {
 	private String registrationDate;
 	private String registrationDate2;
 	private String tradeStatus;
+	private String vendorUrl;
+	private String vendorUrlInfo;
 	
 
 
@@ -43,7 +45,7 @@ public class ItemDTO {
 	/*입력에 필요한 일부 정보*/
 	public ItemDTO(int storeId,String itemTitle, String itemInfo, String itemCategory, String itemStatus, String exchangeYn,
 			int price, String includeDeliveryPriceYn, String relationTag, String tradeArea, int stock,
-			String safetyTradeYn, String imgPath) {
+			String safetyTradeYn, String imgPath, String vendorUrl, String vendorUrlInfo) {
 		super();
 		this.StoreId = storeId;
 		this.itemTitle = itemTitle;
@@ -58,12 +60,14 @@ public class ItemDTO {
 		this.stock = stock;
 		this.safetyTradeYn = safetyTradeYn;
 		this.imgPath = imgPath;
+		this.vendorUrl = vendorUrl;
+		this.vendorUrlInfo = vendorUrlInfo;
 	}
 	
 	/*출력에 필요한 전체 정보*/
 	public ItemDTO(int itemId, int storeId, String itemTitle, String itemInfo, String itemCategory, String itemStatus,
 			String exchangeYn, int price, String includeDeliveryPriceYn, String relationTag, String tradeArea,
-			int stock, String safetyTradeYn, int numLike,String registrationDate, String tradeState) {
+			int stock, String safetyTradeYn, int numLike,String registrationDate, String tradeState, String vendorUrl, String vendorUrlInfo) {
 		super();
 		this.itemId = itemId;
 		this.StoreId = storeId;
@@ -81,6 +85,8 @@ public class ItemDTO {
 		this.numLike = numLike;
 		this.registrationDate = registrationDate;
 		this.tradeStatus = tradeState;
+		this.vendorUrl = vendorUrl;
+		this.vendorUrlInfo = vendorUrlInfo;
 	}
 
 
@@ -174,6 +180,13 @@ public class ItemDTO {
 		return tradeStatus;
 	}
 	
+	public String getVendorUrl() {
+		return vendorUrl;
+	}
+	
+	public String getVendorUrlInfo() {
+		return vendorUrlInfo;
+	}
 }
 
 

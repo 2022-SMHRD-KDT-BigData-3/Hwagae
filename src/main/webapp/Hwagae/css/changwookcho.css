@@ -847,5 +847,45 @@ ul.imgs li{
 	outline: none; 
 } 
 
+.btnModal{
+	height: 30px;
+	width : 60px;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 0px 5px;
+    color: rgb(136, 136, 136);
+    border: 1px solid rgb(238, 238, 238);
+    font-size: 1.1rem;
+    margin-left: 10px;
+    background-color: white;
+}
 
+#modalInfo{
+	font-size: 1.1rem;
+	height: 80px;
+	line-height: 35px;
+	font-weight: bord;
+	font-family: 'NanumBarunGothic', 'serif';
+}
+
+.modalTableBox{
+	-ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    overflow: auto;
+    height: 250px;
+}
+
+.modalTableBox::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+
+.modalTableBox td{
+	font-family: 'NanumBarunGothic', 'serif';
+	font-size: 15px;
+}
+
+.modalTableBox td:nth-child(1) {
+	font-weight: bold;
+}
 

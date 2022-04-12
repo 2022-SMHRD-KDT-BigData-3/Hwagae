@@ -563,9 +563,9 @@ public class ItemDAO {
 			sql.append("AND B.TRADE_STATUS <> 'D' \n");
 		}else {
 			sql.append("AND B.TRADE_STATUS = 'S' \n");
-			sql.append("AND ROWNUM <= 40 ");
+			sql.append("AND ROWNUM <= 40 \n");
 		}
-		
+		sql.append("ORDER BY A.REGISTRATION_DATE DESC \n");
 	
 		System.out.println(sql.toString());
 

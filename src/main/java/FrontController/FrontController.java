@@ -60,11 +60,15 @@ public class FrontController extends HttpServlet {
        		 sc = new ShowManageItemServiceCon();
        	} else if(result.equals("ShowSearchItemServiceCon.do")) { //상품검색
        		 sc = new ShowSearchItemServiceCon();
-       	} else if(result.equals("UdateMainImg.do")) {	//이미지파일폴더의 첫번째 이미지명을 상품대표 이미지로 수정(test데이터생성용)
+       	} else if(result.equals("UpdateMainImg.do")) {	//이미지파일폴더의 첫번째 이미지명을 상품대표 이미지로 수정(test데이터생성용)
        		
        		ItemDAO dao = new ItemDAO();
        		dao.updateMainImg(request);
        	
+       		return;
+       	}else if(result.equals("UpdateTrade.do")) {  //trade정보가 없는 상품 업데이트(test데이터생성용)
+       		ItemDAO dao = new ItemDAO();
+       		dao.insertTrade();
        		return;
        	}
 		

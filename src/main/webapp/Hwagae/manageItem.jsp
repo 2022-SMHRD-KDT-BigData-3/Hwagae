@@ -147,7 +147,8 @@
 				</section>   
 				<input type="hidden" name="storeId" value=${info.store_id}>				
    		</div><!--end Main  -->
-  
+  		
+  		<%@ include file="footer.jsp"%>
     </div>
     <!-- Core JavaScript
     ================================================== -->

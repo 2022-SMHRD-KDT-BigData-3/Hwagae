@@ -134,7 +134,7 @@
 							    	
 							    		<c:forEach items="${itemList}" var="list">
 							    		
-							    			<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 item" status="${list.tradeStatus}">
+							    			<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 item" status="${list.tradeStatus}" style="margin-bottom: 20px;">
 		                                       <div class="blog-box">
 		                                           <div class="post-media">
 		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">
@@ -200,7 +200,7 @@
 							    	
 							    		<c:forEach items="${likeList}" var="list">
 							    		
-							    			<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 item" status="${list.tradeStatus}">
+							    			<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 item" status="${list.tradeStatus}" style="margin-bottom: 20px;">
 		                                       <div class="blog-box">
 		                                           <div class="post-media">
 		                                               <a href="ShowItemServiceCon.do?itemId=${list.itemId}&buyerId=${info.store_id}">

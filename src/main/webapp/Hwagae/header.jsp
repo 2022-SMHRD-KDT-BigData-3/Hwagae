@@ -65,6 +65,7 @@
 							<a href="<%=apiURL%>"><img src="images/login.png" id='login' class="font_Gothic">&nbsp;로그인/회원가입&nbsp;</a>
 							<%}%> 
                             <a href="ShowStoreInfoServiceCon.do" class="checkLogin" class="font_Gothic"><img src="images/storesmall.png" id='storesmall'></i>&nbsp;내상점&nbsp;</a></li>
+                            <a href="./HwagaeTalk.jsp?roomstate=1"><img src="images/icon.png" id='aa' style="width:30px; height:30px;"></a>
                         </div><!-- end search -->
                     </div><!-- end col -->
                     

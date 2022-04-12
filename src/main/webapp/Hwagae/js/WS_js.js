@@ -303,13 +303,14 @@
 
       function updateAlarm(msg){   
       console.log(msg);
-       $('.msgscrol ').width('150px');
-       $('#notificationMsg').text(msg);
+       //$('.msgscrol ').width('150px');
+       //$('#notificationMsg').text(msg);
+     //$("#aa").css("width","150px");
+     $("#aa").attr('src','images/icon2.png');
      }
      
       function resetAlarm(){
-         $('.msgscrol ').width('0px');
-          $('#notificationMsg').text('');
+     	$("#aa").attr('src','images/icon.png');
       }
       
       if(document.getElementsByClassName('mychat')){

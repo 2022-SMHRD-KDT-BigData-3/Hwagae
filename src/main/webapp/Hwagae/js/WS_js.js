@@ -225,10 +225,6 @@
          let i_s_r_ID = $(this).attr("id").split(",");
          $("main ul").css("margin-bottom","65px")
 		  $(".mainHeader").html("");
-		  $(".mainHeader").append("<img src='화개.png' alt=''>"+
-		                  "<h3><br></h2>"+
-		                  "<h2>호출할 상대 아이디</h2>");
-         console.log(i_s_r_ID);
          $.ajax({
             url : "WS_ChatDB.ajax",
             //ajax는 데이터를 넘겨 받을때 넘겨받는 데이터 타입을 명시해주지않는다면

@@ -112,10 +112,23 @@
     </div>
     <!-- Core JavaScript
     ================================================== -->
+        <%session.setAttribute("roomstate", "0");
+      session.setAttribute("item_id", "00");%>
     <script src="js/jquery.min.js"></script>
     <script src="js/tether.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
-   
+    <script src="js/WS_js.js"></script>
+    <script type="text/javascript">
+
+    store_id = <%=ws_store_id%>
+   	item_id = <%=session.getAttribute("item_id")%>
+   	roomstate = <%=session.getAttribute("roomstate")%>
+   	
+   	//$( document ).ready(function(){
+    	//startWebSocket(store_id, item_id, room_state);
+   	//});
+    
+    </script>
 </body>
 </html>

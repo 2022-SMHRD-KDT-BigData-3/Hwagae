@@ -157,6 +157,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
     <script src="js/registItem.js"></script>
-    
+    <script src="js/WS_js.js"></script>
+	<script><%session.setAttribute("roomstate", "0");%></script>	
 </body>
 </html>

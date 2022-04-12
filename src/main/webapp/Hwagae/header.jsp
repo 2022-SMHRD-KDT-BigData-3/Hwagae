@@ -154,7 +154,7 @@
         
 <script src="js/jquery.min.js"></script>        
 <script>
-	document.addEventListener("DOMContentLoaded", () => { 
+	<%-- document.addEventListener("DOMContentLoaded", () => { 
 		<%	
 		if(ws_store_id!=null){%>
 			store_id = '<%=ws_store_id%>';
@@ -165,8 +165,7 @@
 		if(ws_room_state!=null){%>
 			room_state = '<%=ws_room_state%>';
 		<%	}%>	
-		console.log(store_id + " : " + item_id + " : " + room_state);
-	});
+	}); --%>
 
 	
 </script> 
@@ -177,7 +176,8 @@
 		System.out.println("<header.jsp #2> store_id : " + ws_info.getStore_id() + " : item_id : " + ws_item_id + " roomstate : " + ws_room_state);
 %>
 		store_id = '<%=ws_info.getStore_id()%>';	
-
+		item_id = <%=(String)session.getAttribute("item_id")%>;
+		room_state = <%=session.getAttribute("roomstate")%>;
 <%	}%>
 	item_id = '<%=ws_item_id%>';
 	rooms_tate = '<%=ws_room_state%>';

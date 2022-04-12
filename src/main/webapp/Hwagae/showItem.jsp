@@ -298,10 +298,12 @@
 		e.preventDefault();
 	}else if(id == "btnTalk" && loginYn == "Y"){
 		console.log('showitem : item_id' + $('itemID').text());
-		if(store_id==seller_store_id)
-			location.href="./HwagaeTalk.jsp?item_id=" + item_id + "&roomstate=1";
-		else
+		if(${itemDto.storeId}==${info.store_id}){
+			location.href="./HwagaeTalk.jsp?item_id=" + ${itemDto.itemId} + "&roomstate=1";
+		}
+		else{
 			location.href="./HwagaeTalk.jsp?item_id=" + item_id + "&roomstate=2";
+		}
 	}
 	
 });

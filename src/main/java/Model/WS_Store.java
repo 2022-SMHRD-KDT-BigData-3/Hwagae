@@ -9,6 +9,16 @@ public class WS_Store {
 	private Session fileSession = null;
 	private String Store_ID;
 	private String Item_ID;
+	private String Store_Name;
+	
+	public String getStore_Name() {
+		return Store_Name;
+	}
+
+	public void setStore_Name(String store_Name) {
+		Store_Name = store_Name;
+	}
+	
 	private int state;
 	
 	public WS_Store() {

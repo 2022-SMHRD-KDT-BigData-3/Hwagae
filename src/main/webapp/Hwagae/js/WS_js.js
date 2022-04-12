@@ -9,14 +9,10 @@
       else{
          console.log('websocket lobby setting');
          console.log('item_id ' + item_id);
-         if(!room_state) room_state = 0;
+         if(!room_state) room_state = LOBBY;
          if(!webSocket){
             console.log('websocket is null, make a socket.')
-            webSocket = new WebSocket(setWebSocketParam(store_id, item_id, room_state));
-         }else{
-            console.log('websocket is not null, close and make a new one.');
-            WebSocket.close();
-            webSocket = new WebSocket(setWebSocketParam(store_id, item_id, room_state));
+            webSocket = new WebSocket(setWebSocketParam(store_id, item_id, LOBBY));
          }
       } 
       
@@ -122,26 +118,26 @@
                console.log('abnormal situaltion, store_id & item_id are null.');
             }else{
             if(!Item_ID) Item_ID = '00'; // 그냥 대기실 진입, 채팅 내역을 보고자 함
-            str_ws = "ws://172.30.1.5:8081/Hwagae/WebSocketMessage/";
+            str_ws = "ws://172.30.1.18:8081/Hwagae/WebSocketMessage/";
                str_ws += Store_ID + "/";
                str_ws += Item_ID + "/" + State;
          }      
          return str_ws;
          }
       
-      function parseM(type, objJson){
-          console.log(sender +":"+ item_ID +":"+ receiver + ":" + msg);
+      function parseM(type, objJson, msg){
+          //console.log(sender +":"+ item_ID +":"+ receiver + ":" + msg);
           sendRemoteMsg(msg);
       }
       
-      function parseA(type, objJson){
+      function parseA(type, objJson, div, msg){
         if(div==="00"){
          console.log("Alarm message" + msg);
             updateAlarm(msg);      
         }
       }
       
-      function parseI(type, objJson){          
+      function parseI(type, objJson, div, leave_store_id, msg){          
             if(div==="05"){
                 console.log("Message confirm");
                if(msg==="Y") {
@@ -151,27 +147,33 @@
                   $('.isconfirmed').text("읽음");   
              } else console.log('읽지 않음');
             }else if(div==="06"){
-           console.log("History refresh");
+           		console.log("History refresh");
            //$(".chatList").trigger("dblclick");
-         }
+         	}else if(div==="07"){
+				console.log("member out");
+				let leaveMessage = leave_store_id;
+				leaveMessage += "님이 나가셨습니다."
+				sendRemoteMsg(leaveMessage);
+			}
       }
       
       function parseJSON(jsonText){
          try{ 
-                  const obj = JSON.parse(jsonText);
-                console.log(obj);
+              const obj = JSON.parse(jsonText);
+              console.log(obj);
               let type = obj.type;
-              let div = objJson.div;
-              let msg = objJson.msg;
-              let sender = objJson.sender_store_id;
-              let receiver = objJson.receiver_store_id;
-              let item_ID = objJson.item_id;
+              let div = obj.div;
+              let msg = obj.msg;
+              let sender = obj.sender_store_id;
+              let receiver = obj.receiver_store_id;
+              let item_ID = obj.item_id;
+              let store_name = obj.store_name;
                if(type==="M"){
-                  parseM(type, obj);
+                  parseM(type, obj, msg);
                }else if(type==="A"){
-                  parseA(type, obj);
+                  parseA(type, obj, div, msg);
                }else if(type==="I"){
-                  parseI(type, obj);
+                  parseI(type, obj, div, sender, msg);
                }
             }catch(e){
             console.log(e);
@@ -221,6 +223,11 @@
       if(document.getElementsByClassName('chatList')){
       $(".chatList").on("dblclick",function(){
          let i_s_r_ID = $(this).attr("id").split(",");
+         $("main ul").css("margin-bottom","65px")
+		  $(".mainHeader").html("");
+		  $(".mainHeader").append("<img src='화개.png' alt=''>"+
+		                  "<h3><br></h2>"+
+		                  "<h2>호출할 상대 아이디</h2>");
          console.log(i_s_r_ID);
          $.ajax({
             url : "WS_ChatDB.ajax",
@@ -231,14 +238,13 @@
             sender : i_s_r_ID[0],
             item : i_s_r_ID[1],
             receiver : i_s_r_ID[2]
-         },
+         	},
             dataType : "json", 
             contentType : "application/json;charset=UTF-8",
             //넘겨 받는 데이터는 무조건! json 형식으로 인식할꺼에요!
             //넘겨 받는 데이터는 json 타입이어야만 합니다!
             
             success : function(result){               
-               
                $('#chat').html("");
                for(let i =0;i<result.length;i++){               
                   let item_ID = result[i].item_ID;
@@ -247,7 +253,13 @@
                    let talk_Info = result[i].talk_Info;
                   let talk_Date = result[i].talk_Date;
                   // 본인 채팅풍선
-                  if(store_id==i_s_r_ID[0]){
+                  let temp;
+                  if(store_id!=sender_store_ID) {
+						temp = receiver_store_ID;
+					} else
+					temp = sender_store_ID;
+                  //if(temp==i_s_r_ID[0]){
+					if(temp==sender_store_ID){
                            $('#chat').append("<li class='me'>"+
                                    "<div class='entete'>"+
                                    "<h3 name='Store_id'>"+sender_store_ID+"</h3>"+
@@ -261,7 +273,8 @@
                                    "</li>");
                   }
                   // 상대 채팅 풍선
-                  else if(store_id==i_s_r_ID[2]){
+                  //else if(store_id==i_s_r_ID[2]){
+                    else if(temp==receiver_store_ID){				
                      $('#chat').append("<li class='you'>"+
                                  "<div class='entete'>"+
                                  "<h3>"+sender_store_ID+"</h3>"+
@@ -275,8 +288,10 @@
                                    "</li>")
                   }
                     }
+                    $(".mainHeader").append("<img src='images/user.png' alt=''>" +              
+                                "<h2>"+i_s_r_ID[2]+"</h2>");
                if(store_id==i_s_r_ID[0]) seller_store_id = i_s_r_ID[2];
-               else seller_store_id = i_s_r_ID[1];
+               else seller_store_id = i_s_r_ID[0];
                item_id = i_s_r_ID[1];
                enterRoom('I', '04', i_s_r_ID[0], i_s_r_ID[1], i_s_r_ID[2], CHATTING_ROOM);
             },
@@ -300,3 +315,16 @@
          $('.msgscrol ').width('0px');
           $('#notificationMsg').text('');
       }
+      
+      if(document.getElementsByClassName('mychat')){
+	    $(".mychat").on("dblclick",function(){
+	    location.href='hwagaeTalk.jsp'
+	     $("main ul").css("margin-bottom","160px")
+	    	});
+ 		}
+ 		
+ 	$(".que").click(function() {
+  $(this).next(".anw").stop().slideToggle(300);
+  $(this).toggleClass('on').siblings().removeClass('on');
+  $(this).next(".anw").siblings(".anw").slideUp(300); // 1개씩 펼치기
+  });

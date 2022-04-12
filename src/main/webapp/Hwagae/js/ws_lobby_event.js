@@ -11,7 +11,7 @@
    function setWebSocketParam(Store_ID, Item_ID, State){
       let str_ws = null;
       if(Store_ID!=null&&Item_ID!=null){
-         str_ws = "ws://172.30.1.5:8081/Hwagae/WebSocketMessage/";
+         str_ws = "ws://172.30.1.18:8081/Hwagae/WebSocketMessage/";
          str_ws += Store_ID + "/";
          str_ws += Item_ID + "/" + State;
       }
@@ -24,8 +24,12 @@
          if(!store_id){
             console.log('header.jsp log off');
          }else{
-            console.log('websocket in header, item_id: 00 setting');
-            webSocket = new WebSocket(setWebSocketParam(store_id, '00', LOBBY));
+            if(!item_id){
+					console.log('websocket in header, item_id: 00 setting');
+					webSocket = new WebSocket(setWebSocketParam(store_id, '00', LOBBY));	
+				}else{
+					webSocket = new WebSocket(setWebSocketParam(store_id, item_id, LOBBY));
+				}
          }
       } 
       else {
@@ -51,7 +55,6 @@
    };
    
    
-
    function disconnect() {
       if(webSocket!=null) webSocketLobby.close();
       console.log('session disconnect')

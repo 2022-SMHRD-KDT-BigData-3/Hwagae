@@ -39,15 +39,16 @@ public class WS_Room implements WS_ServerSetting{
 	
 	// 이미 생성된 방에 입장, store_ID = 방장 상점, mem = 방에 추가되어야 할 member
 	public int enterRoom(String sender_store_ID, WS_Store mem) {
-		logger.debug("enter the room :  number of rooms = " + roomMember.size());
+		logger.debug("enter the room :  number of room members = " + roomMember.size());
 		int ret = -1;
 		String roomName = rooms.get(sender_store_ID);
-		rooms.put(mem.getStore_ID(), roomName);
+		//rooms.put(mem.getStore_ID(), roomName);
 		
 		if(roomName==null) {
-			logger.debug("there is no room create a room");
-			return ret;
+			logger.debug("there is no room. check opponent");
+			roomName = rooms.get(mem.getStore_ID());	
 		}
+		rooms.put(mem.getStore_ID(), roomName);
 		
 		ArrayList<WS_Store> member = roomMember.get(roomName);
 		logger.debug("enter the room :  number of members in the room = " + member.size());
@@ -76,10 +77,14 @@ public class WS_Room implements WS_ServerSetting{
 	
 	// 해당 멤버가 방에 있는가?
 	public String getRoomName(WS_Store mem, String item_ID) {
-		String roomName = "";
-		if(mem.getItem_ID().equals(item_ID))
+		String roomName = null;
+		System.out.println("getRoomName : mem.getItem_ID : " + mem.getItem_ID());
+		if(mem.getItem_ID().equals(item_ID)) {
+			System.out.println("item id check : mem get id and compare with : " + item_ID);
 			roomName = rooms.get(mem.getStore_ID());
-		
+		}
+			
+		System.out.println("getRoomName : " + roomName);
 		return roomName;
 	}
 	
@@ -123,9 +128,9 @@ public class WS_Room implements WS_ServerSetting{
 					if(mem.getStore_ID().equals(replaceMem.getStore_ID())) {
 						logger.debug("find out the room and replace session" );
 						//mem.getSession().close(); // room class에서는 세션 관리 하지 않는다.
-						mem.setFileSession(replaceMem.getFileSession());
+						//mem.setFileSession(replaceMem.getFileSession());
 						mem.setItem_ID(replaceMem.getItem_ID());
-						mem.setSession(replaceMem.getSession());
+						//mem.setSession(replaceMem.getSession());
 					}
 				}
 			}
@@ -137,6 +142,7 @@ public class WS_Room implements WS_ServerSetting{
 	// 방에서 나갈때 처리
 	public void leaveRoom(String store_ID) {
 		String roomName = rooms.get(store_ID);
+		String leaveMember = null;
 		logger.debug("leaveRoom roomName(store_id): " + roomName);
 		
 		if(roomName!=null) {
@@ -144,16 +150,31 @@ public class WS_Room implements WS_ServerSetting{
 			for(WS_Store mem:members) {
 				if(mem.getStore_ID().equals(store_ID)) {
 					logger.debug("a member in the room has been removed : " + store_ID);
-					members.remove(mem);
+					
 					if(members.size()==0) {
 						rooms.remove(store_ID);
 						rooms.remove(roomName);
 						roomMember.get(roomName).clear();
 						roomMember.remove(roomName);
+						break;
+					}else {
+						logger.debug("save leave member : " + mem.getStore_ID());
+						leaveMember = mem.getStore_ID();
 					}
+					members.remove(mem);
 					break;
 				}
 			}
+			try {
+				for(WS_Store remainedMem:members) {
+					if(remainedMem.getSession()!=null)
+						remainedMem.getSession().getBasicRemote().
+						sendText(convertJsonLeaveMsg(leaveMember, remainedMem.getStore_Name(), remainedMem.getItem_ID(),"OUT"));
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
 			rooms.remove(store_ID);
 		}
 	}
@@ -166,14 +187,38 @@ public class WS_Room implements WS_ServerSetting{
 		return ret;
 	}
 	
-	private String convertJson(String store_ID, String item_ID, String message) {
+	private String convertJsonLeaveMsg(String store_ID, String store_Name, String item_ID, String message) {
+		String jsontext = "";
+		
+		Gson gson = new Gson();
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("type", "I");
+		jsonObject.addProperty("div", LEAVE_ROOM);
+		jsonObject.addProperty("sender_store_id", store_ID);
+		jsonObject.addProperty("store_name", store_Name);
+		
+		if(item_ID!=null)
+			jsonObject.addProperty("item_id", item_ID);
+		else
+			jsonObject.addProperty("item_id", "00");
+		jsonObject.addProperty("msg",message);
+		// JsonObject를 Json 문자열로 변환
+		jsontext = gson.toJson(jsonObject);
+		
+		logger.debug("jsontext : " + jsontext); 
+
+		return jsontext;
+	}
+	
+	private String convertJson(String store_ID, String store_Name, String item_ID, String message) {
 		String jsontext = "";
 		
 		Gson gson = new Gson();
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("type", "M");
 		jsonObject.addProperty("div", CHATTING);
-		jsonObject.addProperty("store_id", store_ID);
+		jsonObject.addProperty("sender_store_id", store_ID);
+		jsonObject.addProperty("store_name", store_Name);
 		jsonObject.addProperty("item_id", item_ID);
 		jsonObject.addProperty("msg",message);
 	
@@ -195,7 +240,7 @@ public class WS_Room implements WS_ServerSetting{
 			for(WS_Store mem:member) {
 				if(mem.getSession()!=null&&!mem.getSession().getId().equals(session.getId())) {
 					logger.debug("broadcast a message: " + message + " to " + mem.getStore_ID());
-					message = convertJson( mem.getStore_ID(),  mem.getItem_ID(), message); // mem.getStore_ID = 메시지를 받는 사람
+					message = convertJson( mem.getStore_ID(), mem.getStore_Name(),  mem.getItem_ID(), message); // mem.getStore_ID = 메시지를 받는 사람
 					mem.getSession().getBasicRemote().sendText(message);
 				}
 			}

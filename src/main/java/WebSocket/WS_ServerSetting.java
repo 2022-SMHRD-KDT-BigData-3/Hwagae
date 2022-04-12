@@ -26,4 +26,5 @@ public interface WS_ServerSetting {
 	public static final String ENTER_ROOM = "04";
 	public static final String MSG_CONFIRM = "05";
 	public static final String HISTORY_REFRESH = "06";
+	public static final String LEAVE_ROOM = "07";
 }

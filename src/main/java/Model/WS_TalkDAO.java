@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class WS_TalkDAO {
 	// 전역변수 선언
@@ -117,11 +118,34 @@ public class WS_TalkDAO {
 				return cnt;
 			}
 			
+			public String getStoreName(String store_id) {
+				String storeName = null;
+				String sql = "select STORE_NAME from store where store_id=?";
+				db_conn();
+				
+				try {
+					psmt = conn.prepareStatement(sql);
+					psmt.setInt(1, Integer.parseInt(store_id));
+					
+					rs = psmt.executeQuery();					
+					// 결과를 꺼내서 ArrayList 로 만들기
+					if(rs.next()) {
+						storeName = rs.getString(1);
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					db_close();
+				}
+				
+				return storeName;
+			}
+			
 			public ArrayList<WS_TalkDTO> talkList(String sender, String item, String receiver) {
 				// 로그인한 사용자에게 온 메세지만 가져오기
 				System.out.println("[talkList 접속완료");
 				// sql 문장은 talkDB.sql에도 있습니다
-				String sql = "select *from hwagae_talk where item_id=? and ((sender_store_id=? and receiver_store_id=?) or (sender_store_id=? and receiver_store_id=?))";
+				String sql = "select *from hwagae_talk where item_id=? and ((sender_store_id=? and receiver_store_id=?) or (sender_store_id=? and receiver_store_id=?)) order by talk_date asc";
 				// 데이터를 담을 ArrayList
 				ArrayList<WS_TalkDTO> mlist = new ArrayList<WS_TalkDTO>();
 				db_conn();				
@@ -143,6 +167,7 @@ public class WS_TalkDAO {
 						String talk_Info = rs.getString(5);
 						String confirm_YN = rs.getString(6);
 						String talk_Date= rs.getString(7);					
+						
 						WS_TalkDTO dto = new WS_TalkDTO(talk_Seq,item_ID,sender_store_ID, receiver_store_ID, talk_Info,confirm_YN, talk_Date);						
 						mlist.add(dto);
 					}					
@@ -296,6 +321,8 @@ public class WS_TalkDAO {
 			         db_close();
 			      }
 			      
+			      for(Entry<String, WS_TalkDTO> data:dataList.entrySet())
+			    	  System.out.println("key : " + data.getKey() + ", item_id : " + data.getValue().getItem_ID());
 			      return dataList;
 			   }
 }

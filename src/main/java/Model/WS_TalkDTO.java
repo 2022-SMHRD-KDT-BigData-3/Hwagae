@@ -8,7 +8,24 @@ public class WS_TalkDTO {
 	private String talk_Info;
 	private String confirm_YN;
 	private String talk_Date;
+	private String sender_store_name;
+	private String receiver_store_name;
 	
+	public String getSender_store_name() {
+		return sender_store_name;
+	}
+	
+	public void setSender_store_name(String sender_store_name) {
+		this.sender_store_name = sender_store_name;
+	}
+	
+	public String getReceiver_store_name() {
+		return receiver_store_name;
+	}
+	
+	public void setReceiver_store_name(String receiver_store_name) {
+		this.receiver_store_name = receiver_store_name;
+	}
 	public WS_TalkDTO() {
 	      
 	   }

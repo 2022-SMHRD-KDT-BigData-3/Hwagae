@@ -38,7 +38,7 @@ public class WS_ChatServer implements WS_ServerSetting {
 	
 	/**
 	 * 채팅방에서 새로 고침한 경우 채팅 내역을 다시 불러오기 위한 command
-	 * @param :session, 상점id, 메시지 확인 여부
+	 * @param :session, WS_Store
 	 * @return : void
 	 */
 	private void sendHistoryRefresh(Session session, WS_Store mem) {
@@ -88,8 +88,11 @@ public class WS_ChatServer implements WS_ServerSetting {
 		jsontext = gson.toJson(jsonObject);
 
 		try {
-			session.getBasicRemote().sendText(jsontext);
-			logger.debug("send msg confirm : " + jsontext.toString());
+			if(session!=null&&session.getBasicRemote()!=null) {
+				session.getBasicRemote().sendText(jsontext);
+				logger.debug("send msg confirm : " + jsontext.toString());
+			}else
+				logger.debug("session is null. cannot send message from this session");
 		} catch (IOException e) {
 			logger.debug("send msg confirm : " + e.toString());
 		}
@@ -183,7 +186,8 @@ public class WS_ChatServer implements WS_ServerSetting {
 	 */
 	private void addMember(String store_ID, String item_ID, Session session, int state) {
 		WS_Store mem = null;
-
+		WS_TalkDAO dbControl = new WS_TalkDAO();
+		
 		try {
 			// mapMember에 websocket session 정보가 있는지 확인
 			mem = mapMember.get(store_ID);
@@ -195,6 +199,8 @@ public class WS_ChatServer implements WS_ServerSetting {
 				mem.setItem_ID(item_ID); // null or 공백: 상품 id가 없는 경우 : 알림 확인, 번개톡 버튼 누른 경우
 				mem.setSession(session);
 				mem.setState(state);
+				mem.setStore_Name(dbControl.getStoreName(store_ID));
+				logger.debug("logged in member's name : " + mem.getStore_Name());
 			} else {
 				if (mem.getSession() == null) {
 					logger.debug("a member session needs to refresh");
@@ -263,8 +269,17 @@ public class WS_ChatServer implements WS_ServerSetting {
 			// session은 변경 되므로 바꿔준다
 			mem.setSession(session);
 			// 대화방에 있던 상태라면 채팅내역을 다시 불러오기 위한 명령어를 보낸다.
-			if(mem.getState()==CHATTING_ROOM)
+			if(mem.getState()==CHATTING_ROOM&&state==CHATTING_ROOM) {
+				logger.debug("for test. history refresh removed.");
 				sendHistoryRefresh(session, mem);
+			}else if(mem.getState()==CHATTING_ROOM&&state==LOBBY) {
+				room.leaveRoom(mem.getStore_ID());
+				mem.setState(LOBBY);
+			}else if(mem.getState()==CHATTING_ROOM&&state==WAITING_ROOM) {
+				room.leaveRoom(mem.getStore_ID());
+				mem.setState(WAITING_ROOM);
+			}
+			mapMember.put(store_ID, mem);
 		}
 		else addMember(store_ID, item_ID, session, state);
 	}
@@ -297,28 +312,31 @@ public class WS_ChatServer implements WS_ServerSetting {
 		try {
 			WS_Store sender = mapMember.get(sender_store_ID);
 			WS_Store receiver = mapMember.get(receiver_store_ID);
+			sender.setItem_ID(item_ID);
 			
 			if (div.equals(CHATTING)) { // message in the chatting room
 				logger.debug("send a message : session id : " + session.getId() + " : msg : " + replyMessage);
 
 				if (receiver != null && receiver.getState() == CHATTING_ROOM) {
-					logger.debug("receiver is in the chatting room. let's check if sender and receiver are in the same room");
-					dbControl.talkSend(setWS_DTO(sender, receiver_store_ID, replyMessage,"Y")); // save message
+					logger.debug("receiver is in the chatting room. let's check if sender and receiver are in the same room?");
 					 
 					if(room.getRoomName(sender_store_ID).equals(room.getRoomName(receiver_store_ID))) {
-						room.broadcastMessage(session, sender_store_ID, replyMessage);// 같은 방 broadcasting message
+						receiver.setItem_ID(item_ID);
 						sendMsgConfirm(session, sender_store_ID, "Y"); // message confirmed, only receiver is in the room
-					}
-					else {
-						sendUpdateWatingRoom(receiver.getSession(), receiver_store_ID, HWAGAE_TALK, replyMessage);
+						room.broadcastMessage(session, sender_store_ID, replyMessage);// 같은 방 broadcasting message
+						dbControl.talkSend(setWS_DTO(sender, receiver_store_ID, replyMessage,"Y")); // save message
+					}else {
 						sendMsgConfirm(session, sender_store_ID, "N"); // message unconfirmed, only receiver is in the room
+						sendUpdateWatingRoom(receiver.getSession(), receiver_store_ID, HWAGAE_TALK, replyMessage);
 					}
-					 for(Entry<String, WS_Store> entry:mapMember.entrySet()) {
-						 if(entry.getValue()!=null &&
-							 !session.getId().equals(entry.getValue().getSession().getId())&&
-							 entry.getValue().getState()!=CHATTING_ROOM)
-						 sendAlarm(entry.getValue().getSession(), sender_store_ID, HWAGAE_TALK, replyMessage); 
-					 }
+					/*
+					 * for(Entry<String, WS_Store> entry:mapMember.entrySet()) {
+					 * if(entry.getValue()!=null &&
+					 * !session.getId().equals(entry.getValue().getSession().getId())&&
+					 * entry.getValue().getState()!=CHATTING_ROOM)
+					 * sendAlarm(entry.getValue().getSession(), sender_store_ID, HWAGAE_TALK,
+					 * replyMessage); }
+					 */
 				} else if (receiver != null) {
 					logger.debug("member is in the : " + receiver.getState() + "  (0: lobby, 1: waiting room)");
 					if (receiver.getState() == WAITING_ROOM) {
@@ -327,7 +345,7 @@ public class WS_ChatServer implements WS_ServerSetting {
 						//sendMsgConfirm(session, sender_store_ID, "N"); // message unconfirmed
 						sendUpdateWatingRoom(receiver.getSession(), receiver_store_ID, HWAGAE_TALK, replyMessage);
 					} else {
-						logger.debug("send alarm to a member in the lobby.");
+						logger.debug("send alarm to a member in the lobby. receiver session id : " + receiver.getSession().getId());
 						dbControl.talkSend(setWS_DTO(sender, receiver_store_ID, replyMessage,"N")); // save message
 						//sendMsgConfirm(session, sender_store_ID, "N"); // message unconfirmed
 						sendAlarm(receiver.getSession(), receiver_store_ID, HWAGAE_TALK, replyMessage); 
@@ -393,12 +411,11 @@ public class WS_ChatServer implements WS_ServerSetting {
 			logger.debug("DOWNLOAD");
 		} else if (div.equals(ENTER_ROOM)) { // 대기실에서 해당 채팅 내역 더블클릭해서 방으로 입장한 상황
 			logger.debug("enter room logged store id : " + logged_store_ID);
-			if(logged_store_ID.equals(sender_store_id)) {
-				logger.debug("enter room logged store id same sender store id");
+			
+			if(logged_store_ID!=null&&logged_store_ID.equals(sender_store_id)) {
 				sender = mapMember.get(sender_store_id);
 				receiver = mapMember.get(receiver_store_id);
-			}else if(logged_store_ID.equals(receiver_store_id)){
-				logger.debug("enter room logged store id same receiver store id");
+			}else if(logged_store_ID!=null&&logged_store_ID.equals(receiver_store_id)){
 				sender = mapMember.get(receiver_store_id);
 				receiver = mapMember.get(sender_store_id);
 			}
@@ -408,17 +425,20 @@ public class WS_ChatServer implements WS_ServerSetting {
 			dbControl.updateMsgConfirm(sender_store_id, receiver_store_id, item_id); // save confirm message
 			
 			// 채팅 내역 히스토리, 더블 클릭으로 방 이동
-			if(sender.getState()==CHATTING_ROOM) room.leaveRoom(sender_store_id);
+			if(sender.getState()==CHATTING_ROOM&&!sender.getItem_ID().equals(item_id)) room.leaveRoom(sender_store_id);
 			sender.setState(CHATTING_ROOM);
 			if (receiver != null) { // 상대방이 접속 중인지 확인, 접속했다면(로그인 해서 websocket을 할당 받은 상태라면)
 				// 해당 멤버가 방을 만들었고, 아이템 코드가 같다면 같은 방으로 입장한다.
 				if (room.getRoomName(receiver, item_id) != null) {
 					logger.debug(
-							"enter the exist room, store id :  " + receiver.getStore_ID() + " , item_id : " + item_id);
+							"enter the exist room, sender store id  : " + sender.getStore_ID()  + "receiver store id :  " + receiver.getStore_ID() + " , item_id : " + item_id);
 					room.enterRoom(receiver.getStore_ID(), sender);
+					sendMsgConfirm(receiver.getSession(), sender.getStore_ID(), "Y"); // message confirmed, only receiver is in the room
+					//room.enterRoom( sender.getStore_ID(), receiver);
 				} else {
 					logger.debug(
 							"there is no room, so make a room :  " + sender.getStore_ID() + " , item_id : " + item_id);
+					sender.setItem_ID(item_id);
 					room.createRoom(sender);
 				}
 			} else {
